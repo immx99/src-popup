@@ -1,0 +1,239 @@
+
+	<style type="text/css">
+		h2 {
+		  font-size: 15px;
+		}
+	</style>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+ <script>
+    // propID=document.getElementById("counter").value;
+
+    // window.onload = function(){
+    // 	propNbr = document.getElementById("storage").getAttribute("counter");
+    // 	alert(propNbr);
+    // }
+    // propNbr = document.getElementById("storage").getAttribute("counter");
+    // propID="0".repeat(7-propID.length) + propID;
+    // console.log("propID="+propID);
+ </script>
+
+
+ <!-- partial:index.partial.html -->
+ 
+    <div>
+      <nav class="menu">
+      <ol>
+      <li class="menu-item">
+        <a href="#0">Proposal</a>
+        <ol class="sub-menu">
+          <li class="menu-item active" id="liCreateNew" ><a href="index.php?newfile=yes&renewal=no&open=no">Create New</a></li> 
+          <li class="menu-item active" id="liRenewal"><a  href="index.php?newfile=yes&renewal=yes&open=no">Renewal</a></li>
+          <li class="menu-item active" id="liOpenProp"><a href="javascript:void(0)" onclick="openClick()">Open</a></li>
+          <li class="menu-item"><a href="#0">Close</a></li>
+          <li class="menu-item"><a href="index.php?newfile=no&renewal=no&open=no">Exit</a></li>
+        </ol>
+      </li>
+      <li class="menu-item"><a href="index.html">Home</a></li>
+      <li class="menu-item"><a href="#0">Report</a></li>
+      <li class="menu-item"><a href="#0">Admin</a></li>
+      <li class="menu-item"><a href="#0">Contact</a></li>
+      <li class="menu-item"><a href="#0">About</a></li>
+      <li class="menu-item"><a href="javascript:void(0)" onclick="loginClick()">Login</a></li>
+      </ol>
+      </nav>
+    </div>
+
+    <div class="side-menu">
+      <div id="side-menu-title">
+        <p align="center">Services</p>
+      </div>
+      <ul class="file-tree">
+          <li><a href="#">A. General</a>
+            <ul>
+              <li><a href="#link2">Overtime Rate for General Service</a> 
+                <ul>
+                </ul>
+              </li>
+              <li><a href="#">1. Dockage</a> 
+                <ul>
+                  <li> <a href="javascript:void(0)" onclick="loginClick()">Docking & Undocking</a> </li>
+                  <li> <a href="javascript:void(0)" onclick="loginClick()">Rate Per Day</a> </li>
+                  <li> <a href="javascript:void(0)" onclick="loginClick()">Tug Boat Assistance</a> </li>
+                </ul>
+              </li>
+              <li><a href="#">2. Floating Charges in Shipyard Area</a>
+              <ul>
+                <li class='active' id='liFloating'><a id='side-menu-floating' class='nav-link floating'
+                    href='javascript:void(0);' onclick='floatingClick()'>a. For time spending shipyards areas, floating days to be
+                    charged (Excluded Port Authority wharfage charges)</a> </li>
+                <li> <a href="#link6">b. For Mooring and Unmooring Operation</a> </li>
+              </ul>
+              </li>
+              <li><a href="#link2">3. Dock Block Removal</a> </li>
+              <li><a href="#">4. Tug Boat and Cranes Hire</a> 
+                <ul>
+                  <li> <a href="#link5">a. Boat and Floating Crane</a> </li>
+                  <li> <a href="#link6">b. Dock and Mobile Crane</a> </li>
+                  <li> <a href="#link6">c. Forklift</a> </li>
+                </ul>
+              </li>
+              <li><a href="#">5. Electric Power Supply</a> 
+                <ul>
+                  <li> <a href="#link5">a. Connecting and Disconecting Shore Power</a> </li>
+                  <li> <a href="#link6">b. Electric Current for Temporary Lighting (docking or floating)</a> </li>
+                  <li> <a href="#link6">c. Power Consumption</a> </li>
+                </ul>
+              </li>
+              <li><a href="#">6. Other Sevices</a> 
+                <ul>
+                  <li> <a href="#link5">a. Fresh Water Supply</a> </li>
+                  <li> <a href="#link6">b. Compressed Air Supply</a> </li>
+                  <li> <a href="#link6">c. Pilotage</a> </li>
+                  <li> <a href="#link5">d. Fire Guard</a> </li>
+                  <li> <a href="#link6">e. Watchman</a> </li>
+                  <li> <a href="#link6">f. Diver Service</a> </li>
+                  <li> <a href="#link5">g. Garbage Disposal</a> </li>
+                  <li> <a href="#link6">h. Oil Storing in Barge</a> </li>
+                  <li> <a href="#link6">i. Flat Top Barge (in Shipyard Area)</a> </li>
+                  <li> <a href="#link5">j. Telephone</a> </li>
+                  <li> <a href="#link6">k. Fire Precaution</a> </li>
+                  <li> <a href="#link6">l. Staging</a> </li>
+                  <li> <a href="#link5">m. Ventilation </li>
+                  <li> <a href="#link6">n. Bilge Pumps</a> </li>
+                  <li> <a href="#link6">o. Ballast Water</a> </li>
+                </ul>
+              </li>
+            </ul>
+            
+
+          <li><a href="#">B. Hull Cleaning & Painting Works</a>
+            <ul>
+              <li> <a href="#link5">1. Scrapping, Sanblasting and Painting</a> </li>
+              <li> <a href="#link6">2. Draft & Plinsoll Mark, Waterline, Ship's Name & Registered Port, Company's Name</a> </li>
+              <li> <a href="#link7">3. Cleaning and Painting of Cofferdam (Owner's Paint)</a> </li>
+              <li> <a href="#link8">4. Cleaning and Painting Tank Top</a> </li>
+              <li> <a href="#link8">5. Cleaning Hold and Engine Bilge</a> </li>
+            </ul>
+          </li>
+          <li><a href="#">C. Anchor Cables Works</a>
+            <ul>
+              <li> <a href="#link5">1. Anchor and Chain</a> </li>
+              <li> <a href="#link6">2. Chain Locker</li>
+            </ul>
+          </li>
+          <li><a href="#">D. Shafting Works</a>
+            <ul>
+              <li> <a href="#link5">1. Measuring Tailshaft Clearence (per shaft)</a> </li>
+              <li> <a href="#link6">2. Shaft Withdrawl (per shaft)</a> </li>
+              <li> <a href="#link7">3. Crack Testing of Shaft Key Way</a> </li>
+              <li> <a href="#link8">4. Stern Gland</a> </li>
+              <li> <a href="#link8">5. Lineshaft Bearing</a> </li>
+              <li> <a href="#link5">6. Remove and Refit Propeller</a> </li>
+              <li> <a href="#link6">7. Propeller Polishing</a> </li>
+              <li> <a href="#link7">8. Static Balancing of Propeller</a> </li>
+            </ul>
+          </li>
+          <li><a href="#">E. Rudder Works</a>
+            <ul>
+              <li> <a href="#link5">1. Rudder Measure</a> </li>
+              <li> <a href="#link6">2. Rudder Inspection</a></li>
+              <li> <a href="#link6">3. Stuffing Box Repacking (Owner's Packing)</a></li>
+            </ul>
+          </li>
+          <li><a href="#">F. Anodes</a>
+            <ul>
+              <li> <a href="#link5">1. Hull Anodes</a> </li>
+              <li> <a href="#link6">2. Tank Anodes</a></li>
+            </ul>
+          </li>
+          <li><a href="#">G. Sea Chest & Sea Valves</a>
+            <ul>
+              <li> <a href="#link5">1. Sea Chest</a> </li>
+              <li> <a href="#link6">2. Sea Valves/Overboard Discharge Valves</a></a></li>
+              <li> <a href="#link6">3. Stop Valves</a></li>
+              <li> <a href="#link6">4. Scupper Valves/Storm Valves</a></li>
+            </ul>
+          </li>
+          <li><a href="#">H. Hull Construction Works</a>
+            <ul>
+              <li> <a href="#link5">1. Shell Plate Renewal (Flat Welding Construction)</a> </li>
+              <li> <a href="#link6">2. Welding</li>
+              <li> <a href="#link6">3. Doubling of Steel Plates (6mm thickness plate</a>)</li>
+              <li> <a href="#link6">4. Eye Plate</a></li>
+            </ul>
+          </li>
+          <li><a href="#">I. Piping Works</a>
+            <ul>
+              <li> <a href="#link5">1. Renewal Straight Steel Pipes</a> </li>
+              <li> <a href="#link6">2. Bending of Pipes (Per Bend)</a></li>
+              <li> <a href="#link6">3. Renewal of Steel Pipe Clamps (Per Piece) </a></li>
+              <li> <a href="#link6">4. Renewal of Pipe Flange (Steel) per Piece</a></li>
+            </ul>
+          </li> 
+          <li><a href="#">J. Tank Works</a>
+            <ul>
+              <li> <a href="#link5">1. Cleaning of Water Tank</a> </li>
+              <li> <a href="#link6">2. Cleaning of Oil Tank</a> </li>
+              <li> <a href="#link7">3. Cleaning of Cargo Tank and Void Tanks</a> </li>
+              <li> <a href="#link8">4. Cleaning of Sewage Tank</a> </li>
+              <li> <a href="#link8">5. Cement Washing (Including Cement)</a> </li>
+              <li> <a href="#link5">6. Manholes</a> </li>
+              <li> <a href="#link6">7. Bottom Plugs</a> </li>
+              <li> <a href="#link7">8. Removal Mud and Sludge</a> </li>
+              <li> <a href="#link6">9. Internal Inspection</a> </li>
+              <li> <a href="#link7">10. Painting per Coat for Inside of Tank (Excluded Assistance Work)</a> </li>
+
+            </ul>
+          </li> 
+          <li><a href="#">K. Inspection & Testing Works</a>
+            <ul>
+              <li> <a href="#link5">1. Tank Test</a> </li>
+              <li> <a href="#link6">2. Hose Test and Watertight Test</a></li>
+              <li> <a href="#link6">3. Ultrasonic Test </a></li>
+              <li> <a href="#link6">4. Gas Free Inspection</a></li>
+              <li> <a href="#link6">5. Megger Test for Main Switchboard (per vessel)</a></li>
+            </ul>
+          </li> 
+      </ul>
+  </div>
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js" type = "text/javascript"></script> 
+  <script src="js/file-explore.js" type = "text/javascript"></script> 
+  <script>
+  $(document).ready(function() {
+              $(".file-tree").filetree();
+            });
+  </script>
+  <div class="fullscreen-container">
+    <div class="popup">
+        <div class="close-btn">&times;</div>
+        <div class="form">
+            <h2>Login</h2>
+            <div class="form-element">
+                <label for="email">Username</label>
+                <input type="text" id="email" placeholder="Enter Your Email Address">    
+            </div>
+            <div class="form-element">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">    
+            </div>
+            <div class="form-element">
+                <input type="checkbox" id="remember-me">    
+                <label for="remember-me">Remember Me</label>
+            </div>
+            <div class="form-element">
+                <button>Sign in</button>
+            </div>
+            <div class="form-element">
+                <a href="#">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+    <div class="dialog-box">
+
+    </div>
+    <script src="js/script.js"></script>
+  </div>    
+  
+  </body>
+</html>

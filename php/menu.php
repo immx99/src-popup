@@ -5,7 +5,7 @@
 		}
 	</style>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
+   
  <script>
     // propID=document.getElementById("counter").value;
 
@@ -24,22 +24,22 @@
     <div>
       <nav class="menu">
       <ol>
-      <li class="menu-item">
-        <a href="#0">Proposal</a>
-        <ol class="sub-menu">
-          <li class="menu-item active" id="liCreateNew" ><a href="index.php?newfile=yes&renewal=no&open=no">Create New</a></li> 
-          <li class="menu-item active" id="liRenewal"><a  href="index.php?newfile=yes&renewal=yes&open=no">Renewal</a></li>
-          <li class="menu-item active" id="liOpenProp"><a href="javascript:void(0)" onclick="openClick()">Open</a></li>
-          <li class="menu-item"><a href="#0">Close</a></li>
-          <li class="menu-item"><a href="index.php?newfile=no&renewal=no&open=no">Exit</a></li>
-        </ol>
-      </li>
-      <li class="menu-item"><a href="index.html">Home</a></li>
-      <li class="menu-item"><a href="#0">Report</a></li>
-      <li class="menu-item"><a href="#0">Admin</a></li>
-      <li class="menu-item"><a href="#0">Contact</a></li>
-      <li class="menu-item"><a href="#0">About</a></li>
-      <li class="menu-item"><a href="javascript:void(0)" onclick="loginClick()">Login</a></li>
+        <li class="menu-item">
+          <a href="#0">Proposal</a>
+          <ol class="sub-menu">
+            <li class="menu-item active" id="liCreateNew" ><a href="index.php?newfile=yes&renewal=no&open=no">Create New</a></li> 
+            <li class="menu-item active" id="liRenewal"><a  href="index.php?newfile=yes&renewal=yes&open=no">Renewal</a></li>
+            <li class="menu-item active" id="liOpenProp"><a href="javascript:void(0)" onclick="openClick()">Open</a></li>
+            <li class="menu-item"><a href="#0">Close</a></li>
+            <li class="menu-item"><a href="index.php">Logout</a></li>
+          </ol>
+        </li>
+        <li class="menu-item"><a href="index.html">Home</a></li>
+        <li class="menu-item"><a href="#0">Report</a></li>
+        <li class="menu-item"><a href="#0">Admin</a></li>
+        <li class="menu-item"><a href="#0">Contact</a></li>
+        <li class="menu-item"><a href="#0">About</a></li>
+        <li class="menu-item"><a href="javascript:void(0)" onclick="loginClick()">Login</a></li>
       </ol>
       </nav>
     </div>
@@ -57,7 +57,7 @@
               </li>
               <li><a href="#">1. Dockage</a> 
                 <ul>
-                  <li> <a href="javascript:void(0)" onclick="loginClick()">Docking & Undocking</a> </li>
+                  <li> <a href="javascript:void(0)" onclick="dckgDockingClick()">Docking & Undocking</a> </li>
                   <li> <a href="javascript:void(0)" onclick="loginClick()">Rate Per Day</a> </li>
                   <li> <a href="javascript:void(0)" onclick="loginClick()">Tug Boat Assistance</a> </li>
                 </ul>
@@ -205,7 +205,7 @@
             });
   </script>
   <div class="fullscreen-container">
-    <div class="popup">
+    <div class="popup" id="popup">
         <div class="close-btn">&times;</div>
         <div class="form">
             <h2>Login</h2>
@@ -232,8 +232,8 @@
     <div class="dialog-box">
 
     </div>
-    <script src="js/script.js"></script>
+    
   </div>    
-  
+  <script src="js/script.js"></script>
   </body>
 </html>

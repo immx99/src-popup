@@ -32,27 +32,27 @@
 
 <body>
 <?php 
-    // include 'php/geodata.php';
-    // include 'php/getclientip.php';
-    // date_default_timezone_set("Asia/Bangkok");
-    // $now=date('d-m-Y H:i:s ');
-    // $clientIP=get_client_ip();
-    // //$clientIP="103.119.141.19"; //"114.142.170.35";
-    // $geoDataArr=geoData($clientIP);
-    // $clientIpAddress="" . $now . " " . $clientIP . "  " . "    ";
-    // for ($i=0; $i<5; $i++) {
-    //   if ($i==0) {
-    //     $clientIpAddress .= $geoDataArr[$i];
-    //   } else {
-    //     $clientIpAddress .= ", " . $geoDataArr[$i];
-    //   }
-    // }
+    include('php/geodata.php');
+    include('php/getclientip.php');
+    date_default_timezone_set("Asia/Bangkok");
+    $now=date('d-m-Y H:i:s ');
+    $clientIP=get_client_ip();
+    //$clientIP="103.119.141.19"; //"114.142.170.35";
+    $geoDataArr=geoData($clientIP);
+    $clientIpAddress="" . $now . " " . $clientIP . "  " . "    ";
+    for ($i=0; $i<5; $i++) {
+      if ($i==0) {
+        $clientIpAddress .= $geoDataArr[$i];
+      } else {
+        $clientIpAddress .= ", " . $geoDataArr[$i];
+      }
+    }
     
-    // $clientIpAddress .= ",'index.php'" . "\r\n";
-    // //echo "Client Address= " . $clientIpAddress;
-    // $myIPsFile = fopen("client_access.log", "a") or die("Unable to open file!");
-    // fwrite($myIPsFile, $clientIpAddress);
-    // fclose($myIPsFile);
+    $clientIpAddress .= ",'index.php'" . "\r\n";
+    //echo "Client Address= " . $clientIpAddress;
+    $myIPsFile = fopen("client_access.log", "a") or die("Unable to open file!");
+    fwrite($myIPsFile, $clientIpAddress);
+    fclose($myIPsFile);
    
 ?>
  

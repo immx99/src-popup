@@ -16,6 +16,7 @@
     // propNbr = document.getElementById("storage").getAttribute("counter");
     // propID="0".repeat(7-propID.length) + propID;
     // console.log("propID="+propID);
+
  </script>
 
 
@@ -52,16 +53,8 @@
           <li><a href="#">A. General</a>
             <ul>
               <li><a href="#link2">Overtime Rate for General Service</a> 
-                <ul>
-                </ul>
               </li>
-              <li><a href="#">1. Dockage</a> 
-                <ul>
-                  <li> <a href="javascript:void(0)" onclick="dckgDockingClick()">Docking & Undocking</a> </li>
-                  <li> <a href="javascript:void(0)" onclick="loginClick()">Rate Per Day</a> </li>
-                  <li> <a href="javascript:void(0)" onclick="loginClick()">Tug Boat Assistance</a> </li>
-                </ul>
-              </li>
+              <li class='active' id='liDockage'><a id='side-menu-dockage' class='nav-link dockage' href='javascript:void(0)' onclick="dockageClick()">1. Dockage</a> </li>
               <li><a href="#">2. Floating Charges in Shipyard Area</a>
               <ul>
                 <li class='active' id='liFloating'><a id='side-menu-floating' class='nav-link floating'
@@ -228,12 +221,113 @@
                 <a href="#">Forgot Password?</a>
             </div>
         </div>
-    </div>
-    <div class="dialog-box">
+    </div> 
+  </div>  
+  <script>
+    function disableSideMenu(str) {
+      enableSideMenu("all");
+      switch (str) {	
+        case 'dockage':
+          $("#liDockage").removeClass("active");// 
+          $("#liDockage").addClass("disabled");// for 2nd li disable  
+          document.getElementById('side-menu-dockage').style.color="grey";
+          break;
+        case 'floating':
+          $("#liFloating").removeClass("active");// 
+          $("#liFloating").addClass("disabled");// for 2nd li disable  
+          document.getElementById('side-menu-floating').style.color="grey";
+          break;
+        case "all":
+        //   $("#liGeneral").removeClass("active");// 
+        //   $("#liGeneral").addClass("disabled");// for 2nd li disable  
+          $("#liDockage").removeClass("active");// 
+          $("#liDockage").addClass("disabled");// for 2nd li disable  
+          document.getElementById('side-menu-dockage').style.color="grey";
+          $("#liFloating").removeClass("active");// 
+          $("#liFloating").addClass("disabled");// for 2nd li disable  
+          document.getElementById('side-menu-floating').style.color="grey";
+          break;
+      }
+    }
+    function enableSideMenu(str) {
+     
+      switch (str) {	
+        case 'dockage':
+          $("#liDockage").removeClass("disabled");// 
+          $("#liDockage").addClass("enabled");// for 2nd li enable  
+          document.getElementById('side-menu-dockage').style.color="black";
+          break;
+        case "floating":
+          $("#liFloating").removeClass("disabled");// 
+          $("#liFloating").addClass("enabled");// for 2nd li enable  
+          document.getElementById('side-menu-floating').style.color="black";
+          break;
+        case "all":
+          $("#liDockage").removeClass("disabled");// 
+          $("#liDockage").addClass("enabled");// for 2nd li enable  
+          document.getElementById('side-menu-dockage').style.color="black";
+          $("#liFloating").removeClass("disabled");// 
+          $("#liFloating").addClass("enabled");// for 2nd li enable  
+          document.getElementById('side-menu-floating').style.color="black";
+          break;
+      }
+    }
+    function openClick() {
+      $("#liCreateNew").removeClass("active");// 
+      $("#liCreateNew").addClass("disabled");// for 2nd li disable  
+      $("#liOpenProp").removeClass("active");// 
+      $("#liOpenProp").addClass("disabled");// for 2nd li disable  
+      $("#liRenewal").removeClass("active");
+      $("#liRenewal").addClass("disabled");
+      document.getElementById('liCreateNew').style.color="grey"; //tidak jalan
+      document.getElementById("storage").value="xxxxxxx/no/no/yes"
+      $.get("php/openprop-form.php",function(data) {
+          $("#container").html(data);
+      
+      });
+    }
+    function renewalClick() {
+      $("#liCreateNew").removeClass("active");// 
+      $("#liCreateNew").addClass("disabled");// for 2nd li disable  
+      $("#liOpenProp").removeClass("active");// 
+      $("#liOpenProp").addClass("disabled");// for 2nd li disable  
+      $("#liRenewal").removeClass("active");
+      $("#liRenewal").addClass("disabled");
+      document.getElementById('liCreateNew').style.color="grey"; //tidak jalan
+      // document.getElementById("storage").value="xxxxxxx/no/yes/yes"
+      $.get("php/renewalPropForm.php",function(data) {
+          $("#container").html(data);
+      
+      });
+    }
+    function dockageClick() {
+      // enableSideMenu("all");
+      disableSideMenu("dockage");
+      // $(document).ready(function () {
+      //   $('.dockage').click(function () {
+      //     $('#dockage').load('php/dockage.php');
+      //   });
+      // });
 
-    </div>
-    
-  </div>    
+      // $.get("php/dockage.php",function(data) {
+      //     $("#dockage").html(data);
+      
+      // });
+      // alert("DOCKAGE");
+    }
+    function floatingClick() {
+      // alert("Floating in menu file");
+      // enableSideMenu("all");
+      disableSideMenu("floating");
+      // $.get("php/floating.php",function(data) {
+      //      $("#floating").html(data);
+       
+      //   });
+    }
+
+
+  </script>
+  <div id="container"></div>  
   <script src="js/script.js"></script>
   </body>
 </html>

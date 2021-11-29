@@ -6,6 +6,7 @@ document.querySelector(".popup .close-btn").addEventListener("click",function() 
   }); 
 });
 
+
 function loginClick() {
   showLoginForm();
   document.querySelector(".popup").classList.add("active");
@@ -16,15 +17,18 @@ function loginClick() {
 
 
 
-function dckgDockingClick() {
-  
+function dockageClick() {
+  let htmlString="";
+  disableSideMenu("dockage");
   $.ajax({
     url:'dckgData.json',
     dataType:'json',
     type:'get',
     cache: false,
     success: function(data) {
-        showDckgServiceItem(data);		 
+        htmlString=showServiceItem(data,null);		 
+        // console.log("htmlString=" + htmlString);
+        
     }
   })
  
@@ -177,9 +181,19 @@ function percent() {
 }	
 
 
-function showDckgServiceItem(data1) {
+function showServiceItem(data1,selectedData) {
+  console.log(selectedData);
   let htmlString="";
   let dckgData="";
+  let grossTon;
+  let typeOfVessel;
+  if (!selectedData){
+    grossTon="Up to 300";
+    typeOfVessel="warship";
+  } else {
+    grossTon=selectedData.split("/")[0];
+    typeOfVessel=selectedData.split("/")[1];
+  }
   htmlString+='<div class="card">';
   htmlString+='<div class="card-header">';
   htmlString+='<h4 id="judul">DOCKAGE </h4>';
@@ -211,9 +225,9 @@ function showDckgServiceItem(data1) {
   
   // htmlString+='<tr><td><label for="dckgDocking">Docking & Undocking</label></td>'
   htmlString+='<tr><td><select name="serviceItem" id="serviceItem" onchange="return setRate();">';
-  htmlString+= '<option value="DCKG11">Docking & Undocking</option>';
-  htmlString+= '<option value="DCKG12">Rate per Day</option>';
-  htmlString+= '<option value="DCKG13">Tug Boat Assistance</option>';
+  htmlString+= '<option value="Docking & Undocking">Docking & Undocking</option>';
+  htmlString+= '<option value="Rate per Day">Rate per Day</option>';
+  htmlString+= '<option value="Tug Boat Assistance">Tug Boat Assistance</option>';
   htmlString+="</select></td>";
   htmlString+='<td align="right" width="2%"><label for="rateUnit">Rp.</label></td>';
 
@@ -258,22 +272,119 @@ function showDckgServiceItem(data1) {
     });
     
     $('#plusBtn').click(function () {
-      let qty=	parseInt(document.getElementById("qty").value);
-      // console.log(qty);
-      qty++;
-      document.getElementById("qty").value=qty;
-      if (qty>1) {
-        $('#minusBtn').removeAttr("disabled");
-      }
-      // console.log("plusBtnClick=" +qty);
-      // console.log(qty);
-      calculate();
+        let qty=	parseInt(document.getElementById("qty").value);
+        // console.log(qty);
+        qty++;
+        document.getElementById("qty").value=qty;
+        if (qty>1) {
+          $('#minusBtn').removeAttr("disabled");
+        }
+        // console.log("plusBtnClick=" +qty);
+        // console.log(qty);
+        calculate();
+    });
+    $('#proceedBtn').click(function () {
+      let str;
+      let newAccess;
+        $(document).ready(function(){
+          $(".fullscreen-container").fadeOut(200);
+        }); 
+        document.querySelector(".popup").classList.remove("active");  
+        // document.getElementById("container").insertAdjacentHTML("afterend",proceedClick());
+        str=document.getElementById("container").outerHTML;
+
+        if (str.indexOf("card-footer")==-1) {
+            newAccess=true;
+            document.getElementById("container").innerHTML=proceedClick(newAccess, str);
+        } else {
+            newAccess=false;
+            // document.querySelector("#container .card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
+            document.querySelector("#container #close-line").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
+            // document.getElementById("card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess));
+           
+        }
+        
+        $(document).ready(function(){
+          $('#addBtn').click(function () {
+            console.log("clickADD");
+            document.querySelector(".popup").classList.add("active");
+            $(document).ready(function(){
+              $(".fullscreen-container").fadeTo(200,1);
+            });
+          });
+        });
+        
     });
   });  
   
   // console.log(htmlString);
-  return htmlString;
+  return 0;
 }
+
+function proceedClick(newAccess) {
+  let htmlString="";
+ 
+  if (newAccess==true) {
+
+      htmlString+='<div class="card">';
+      htmlString+='<table  width=50% id="tblStaticData">';
+      htmlString+="<tr><td>Gross Ton or Displacement</td><td size='1'>:</td>"; 
+      htmlString+='<td width="50%" style="text-align:left;">' + document.getElementById("grossTonSelect").value + "</td></tr>";
+      htmlString+="<tr><td>Type of Vessel</td><td size='1'>:</td>";
+      htmlString+='<td width="50%" style="text-align:left;">' + document.getElementById("typeOfVessel").value + "</td></tr>";
+      htmlString+='</table>';
+      
+      htmlString+='<div class="card-header">';
+      htmlString+='<h4 id="title">DOCKAGE </h4>';
+      htmlString+='</div>';
+      htmlString+='<div class="card-body">';
+      
+      htmlString+='<table  width=98% id="tblServiceItemsData">';
+      htmlString+='<tr><td colspan="3" width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
+      htmlString+='<tr><td colspan="2" width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+      htmlString+= formatNumber(document.getElementById("rate").value);
+      if (document.getElementById("workingTime").style.visibility=="visible") {
+          htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  -  " +  document.getElementById("workingDay").value ;
+          htmlString+= " and rate factor =  "  + document.getElementById("rateFactor").value ;
+      }
+      htmlString+= "</td><td size='1'  style='text-align:right'>Rp. </td>"; 
+      htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
+      htmlString+='</table>';
+      htmlString+="<p id='close-line'>---------------------------------------------------------------------------------------</p>";
+      
+      htmlString+='</div>';  //end card-body
+     
+      htmlString+='<div class="card-footer">';
+ 
+      // htmlString+='<button type="button" id= "dckgDeleteBtn" class="btn btn-warning float-right">Delete</button>';
+      htmlString+='<button type="button" id="saveBtn" class="btn btn-info float-right">Save</button>';
+      htmlString+='<button type="button" id="savePrintBtn" class="btn btn-info float-right">Save & Print</button>';
+      htmlString+='<button type="button" id= "addBtn" class="btn btn-success float-right">Add</button>';
+      // htmlString+='<button type="button" id= "dckgEditBtn" class="btn btn-info float-right" disabled>Edit</button>';
+      htmlString+='</div>';  //end-card-footers
+
+  } else {
+      htmlString+='<table  width=98% id="tblServiceItemsData">';
+      htmlString+='<tr><td colspan="3" width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
+      htmlString+='<tr><td colspan="2" width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+      htmlString+= formatNumber(document.getElementById("rate").value);
+      if (document.getElementById("workingTime").style.visibility=="visible") {
+          htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  -  " +  document.getElementById("workingDay").value ;
+          htmlString+= " and rate factor =  "  + document.getElementById("rateFactor").value ;
+      }
+      htmlString+= "</td><td size='1'  style='text-align:right'>Rp. </td>"; 
+      htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
+      htmlString+='</table>';
+  }
+  
+ 
+  htmlString+='</div>';  //end-card
+  
+
+  return htmlString;
+
+}
+
 
 function setRate() {
   let grossTonIdx=document.getElementById("grossTonSelect").selectedIndex

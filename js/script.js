@@ -1,4 +1,7 @@
-
+var iDckg=0;
+var totalDckg=0;
+var selectedData="Up to 300/warship";
+var title="";
 document.querySelector(".popup .close-btn").addEventListener("click",function() {
   document.querySelector(".popup").classList.remove("active");
   $(document).ready(function(){
@@ -26,7 +29,7 @@ function dockageClick() {
     type:'get',
     cache: false,
     success: function(data) {
-        htmlString=showServiceItem(data,null);		 
+        htmlString=showServiceItem("dockage",data,selectedData);		 
         // console.log("htmlString=" + htmlString);
         
     }
@@ -46,8 +49,9 @@ function calculate () {
   let	qty = document.getElementById("qty").value;
 	let rateFactor=document.getElementById("rateFactor").value;
   let charge=0;
-  charge=formatNumber(parseFloat(rate.replace(/,/g, ""))*parseInt(qty)*parseInt(rateFactor.split("%")[0])/100);
-  // console.log("rate=" + parseFloat(rate.replace(/,/g, "")) + "\n");
+  // console.log("rate=" + rate.replace(/\./g, "").split(",")[0] + "\n");
+  charge=formatNumber(parseFloat(rate.replace(/\./g, "").split(",")[0])*parseInt(qty)*parseInt(rateFactor.split("%")[0])/100);
+ 
   // console.log("qty=" + parseInt(qty));
   // console.log("qty=" + parseInt(rateFactor.split("%")[0]));
   // console.log("charge=" + charge + "\n");
@@ -56,9 +60,12 @@ function calculate () {
 }
 
 function formatNumber(num) {
-	return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+	return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') + ",-"
 }
 
+function unformatNumber(str) {
+	return parseFloat(str.replace(/\./g, "").split(",")[0]);
+}
 function overtimeCmb(work,value) {
   var htmlString=""; 
   if (work=="t") {
@@ -181,35 +188,45 @@ function percent() {
 }	
 
 
-function showServiceItem(data1,selectedData) {
-  console.log(selectedData);
+function showServiceItem(service,serviceData,selectedData) {
+  // console.log(selectedData);
   let htmlString="";
   let dckgData="";
   let grossTon;
   let typeOfVessel;
-  if (!selectedData){
-    grossTon="Up to 300";
-    typeOfVessel="warship";
-  } else {
-    grossTon=selectedData.split("/")[0];
-    typeOfVessel=selectedData.split("/")[1];
-  }
+ 
+  grossTon=selectedData.split("/")[0];
+  typeOfVessel=selectedData.split("/")[1];
+  switch (service) {
+    case "dockage":
+        var j=0
+        var htmlGrossTonString="";
+        htmlGrossTonString+='<table width=98% id="tblServiceItem">';
+        htmlGrossTonString+="<tr><td colspan='2' align='left' width='50%'>";
+        htmlGrossTonString+='<label for="grossTon">Gross Ton or Displacement</label> </td> <td align="left" align="left">'
+        htmlGrossTonString+='<select name="grossTonSelect"" id="grossTonSelect" onchange="return setRate();">';;
+        title="DOCKAGE";
+        for(i=0; i < serviceData.DockageData.length; i++) {
+          if (serviceData.DockageData[i].grossTon==grossTon){
+              htmlGrossTonString += "<option  value='" + serviceData.DockageData[i].grossTon  + "' selected>" + 
+              serviceData.DockageData[i].grossTon + " </option>";
+              j=i;
+          } else {
+              htmlGrossTonString  += "<option  value='" + serviceData.DockageData[i].grossTon  + "'>" + 
+              serviceData.DockageData[i].grossTon + " </option>";
+          }
+        }
+        htmlGrossTonString+="</select></td></tr>";
+        break;
+    case "floating":
+        break;
+}
   htmlString+='<div class="card">';
   htmlString+='<div class="card-header">';
-  htmlString+='<h4 id="judul">DOCKAGE </h4>';
+  htmlString+='<h4 id="judul">' + title + '</h4>';
   htmlString+='</div>';
   htmlString+='<div class="card-body">';
-  htmlString+='<form  method="POST"  id="serviceItemForm" class="serviceItemFrom">'
-  htmlString+='<table width=98% id="tblServiceItem">';
-  htmlString+="<tr><td colspan='2' align='left' width='50%'>";
-  htmlString+='<label for="grossTon">Gross Ton or Displacement</label> </td> <td align="left" align="left">';
-  htmlString+='<select name="grossTonSelect"" id="grossTonSelect" onchange="return setRate();">';
-  for(i=0; i < data1.DockageData.length; i++) {
-      htmlString += "<option  value='" + data1.DockageData[i].grossTon  + "'>" + 
-      data1.DockageData[i].grossTon + " </option>";
-
-  }
-  htmlString+="</select></td></tr>";
+  htmlString+= htmlGrossTonString;
 
   htmlString+='<tr><td colspan="2"><label for="typeOfVessel">Type of Vessel</label> </td>';
   htmlString+='<td><select name="typeOfVessel" id="typeOfVessel">';
@@ -232,10 +249,10 @@ function showServiceItem(data1,selectedData) {
   htmlString+='<td align="right" width="2%"><label for="rateUnit">Rp.</label></td>';
 
   htmlString+="<td><input type='text' id='rate' name='rate' value='" + 
-                        formatNumber(data1.DockageData[0].docking) + "' size='10' readonly> </td></tr>";
+                        formatNumber(serviceData.DockageData[j].docking) + "' size='10' readonly> </td></tr>";
 
   htmlString+='<tr><td colspan="2"><label for="qty">Quantity</label></td>';   
-  htmlString+='<td><button type="button" id="minusBtn" class="btn btn-success btn-sm" disabled>-</button>';                 
+  htmlString+='<td><button type="button" id="minusBtn" class="btn btn-danger btn-sm" disabled>-</button>';                 
   htmlString+="<input type='text' id='qty' name='qty' value='1' onchange='return calculate();'  size='1' >";
   htmlString+='<button type="button" id="plusBtn" class="btn btn-success btn-sm">+</button></td></tr>'; 
 
@@ -247,7 +264,7 @@ function showServiceItem(data1,selectedData) {
   htmlString+="<td><input type='text' id='rateFactor' name='rateFactor' value='100%' size='4' readonly> </td></tr>";
   htmlString+='<tr><td><label for="charge">Charge</label></td>';
   htmlString+='<td align="right" width="2%"><label for="rateUnit">Rp.</label></td>';
-  htmlString+="<td><input type='text' id='charge' name='charge' value='" + formatNumber(data1.DockageData[0].docking) + "' size='10' readonly> </td></tr>";
+  htmlString+="<td><input type='text' id='charge' name='charge' value='" + formatNumber(serviceData.DockageData[j].docking) + "' size='10' readonly> </td></tr>";
   htmlString+="</table>" ;            
   htmlString+='</div>';//end-card-body
   htmlString+='<div class="card-footer">';
@@ -284,36 +301,39 @@ function showServiceItem(data1,selectedData) {
         calculate();
     });
     $('#proceedBtn').click(function () {
-      let str;
-      let newAccess;
-        $(document).ready(function(){
-          $(".fullscreen-container").fadeOut(200);
-        }); 
-        document.querySelector(".popup").classList.remove("active");  
-        // document.getElementById("container").insertAdjacentHTML("afterend",proceedClick());
-        str=document.getElementById("container").outerHTML;
+          let str;
+          let newAccess;
+          $(document).ready(function(){
+            $(".fullscreen-container").fadeOut(200);
+          }); 
+          document.querySelector(".popup").classList.remove("active");  
+          // document.getElementById("container").insertAdjacentHTML("afterend",proceedClick());
+          str=document.getElementById("container").outerHTML;
 
-        if (str.indexOf("card-footer")==-1) {
-            newAccess=true;
-            document.getElementById("container").innerHTML=proceedClick(newAccess, str);
-        } else {
-            newAccess=false;
-            // document.querySelector("#container .card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
-            document.querySelector("#container #close-line").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
-            // document.getElementById("card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess));
-           
-        }
-        
-        $(document).ready(function(){
-          $('#addBtn').click(function () {
-            console.log("clickADD");
-            document.querySelector(".popup").classList.add("active");
-            $(document).ready(function(){
-              $(".fullscreen-container").fadeTo(200,1);
+          if (str.indexOf("card-footer")==-1) {
+              newAccess=true;
+              document.getElementById("container").innerHTML=proceedClick(newAccess, str);
+          } else {
+              newAccess=false;
+              // document.querySelector("#container .card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
+              str=proceedClick(newAccess);
+              document.querySelector("#container #subTotal").insertAdjacentHTML("beforebegin", str.split("|")[0]); 
+              // console.log("subtotal=" + str.split("|")[1]);
+              document.getElementById("subTotal").innerHTML=str.split("|")[1];
+              // document.getElementById("card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess));
+            
+          }
+            
+          $(document).ready(function(){
+            $('#addBtn').click(function () {
+              // console.log("clickADD");
+              document.querySelector(".popup").classList.add("active");
+              $(document).ready(function(){
+                $(".fullscreen-container").fadeTo(200,1);
+              });
             });
           });
-        });
-        
+            
     });
   });  
   
@@ -323,9 +343,9 @@ function showServiceItem(data1,selectedData) {
 
 function proceedClick(newAccess) {
   let htmlString="";
- 
+  iDckg++;
   if (newAccess==true) {
-
+     
       htmlString+='<div class="card">';
       htmlString+='<table  width=50% id="tblStaticData">';
       htmlString+="<tr><td>Gross Ton or Displacement</td><td size='1'>:</td>"; 
@@ -335,22 +355,30 @@ function proceedClick(newAccess) {
       htmlString+='</table>';
       
       htmlString+='<div class="card-header">';
-      htmlString+='<h4 id="title">DOCKAGE </h4>';
+      htmlString+='<h4 id="title">' + title + '</h4>';
       htmlString+='</div>';
       htmlString+='<div class="card-body">';
       
-      htmlString+='<table  width=98% id="tblServiceItemsData">';
-      htmlString+='<tr><td colspan="3" width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
-      htmlString+='<tr><td colspan="2" width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
-      htmlString+= formatNumber(document.getElementById("rate").value);
-      if (document.getElementById("workingTime").style.visibility=="visible") {
-          htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  -  " +  document.getElementById("workingDay").value ;
-          htmlString+= " and rate factor =  "  + document.getElementById("rateFactor").value ;
-      }
-      htmlString+= "</td><td size='1'  style='text-align:right'>Rp. </td>"; 
+      htmlString+='<table width=98% id="tblServiceItemsData">';
+      htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
+      htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
       htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
+      htmlString+='<tr><td colspan="3" width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+      htmlString+= document.getElementById("rate").value;
+      if (document.getElementById("workingTime").style.visibility=="visible") {
+          htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
+          htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
+      }
       htmlString+='</table>';
-      htmlString+="<p id='close-line'>---------------------------------------------------------------------------------------</p>";
+      htmlString+="<div id='subTotal'>";
+      htmlString+='<table width=98% id="tblSubTotal">';
+      htmlString+='<tr><td width="80%" style="text-align:right" >Dockage Charge Total: ( ' + iDckg + ' )</td>';
+      htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
+      totalDckg+=unformatNumber(document.getElementById("charge").value);
+      htmlString+= "<td style='text-align:right'>" + formatNumber(totalDckg) + "</td></tr>";  
+      htmlString+='</table>';
+      htmlString+="</div>";
+      // htmlString+="<p id='close-line'>---------------------------------------------------------------------------------------</p>";
       
       htmlString+='</div>';  //end card-body
      
@@ -365,15 +393,25 @@ function proceedClick(newAccess) {
 
   } else {
       htmlString+='<table  width=98% id="tblServiceItemsData">';
-      htmlString+='<tr><td colspan="3" width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
-      htmlString+='<tr><td colspan="2" width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
-      htmlString+= formatNumber(document.getElementById("rate").value);
-      if (document.getElementById("workingTime").style.visibility=="visible") {
-          htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  -  " +  document.getElementById("workingDay").value ;
-          htmlString+= " and rate factor =  "  + document.getElementById("rateFactor").value ;
-      }
-      htmlString+= "</td><td size='1'  style='text-align:right'>Rp. </td>"; 
+      htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
+      htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
       htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
+      htmlString+='<tr><td colspan="3" width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+      htmlString+= document.getElementById("rate").value;
+      if (document.getElementById("workingTime").style.visibility=="visible") {
+          htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
+          htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
+      }
+      htmlString+= "</td>"; 
+     
+      htmlString+='</table>';
+      htmlString+="|";
+      htmlString+='<table width=98% id="tblSubTotal">';
+     
+      totalDckg+=unformatNumber(document.getElementById("charge").value);
+      htmlString+='<tr><td width="80%" style="text-align:right" >Dockage Charge Total: ( ' + iDckg + ' )</td>';
+      htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
+      htmlString+= "<td style='text-align:right'>" + formatNumber(totalDckg) + "</td></tr>";  
       htmlString+='</table>';
   }
   

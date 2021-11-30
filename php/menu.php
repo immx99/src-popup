@@ -54,11 +54,11 @@
             <ul>
               <li><a href="#link2">Overtime Rate for General Service</a> 
               </li>
-              <li class='active' id='liDockage'><a id='side-menu-dockage' class='nav-link dockage' href='javascript:void(0)' onclick="dockageClick()">1. Dockage</a> </li>
+              <li class='active' id='liDockage'><a id='side-menu-dockage' class='nav-link dockage' href='javascript:void(0)' onclick='side_menu_click("dockage")'>1. Dockage</a> </li>
               <li><a href="#">2. Floating Charges in Shipyard Area</a>
               <ul>
                 <li class='active' id='liFloating'><a id='side-menu-floating' class='nav-link floating'
-                    href='javascript:void(0);' onclick='floatingClick()'>a. For time spending shipyards areas, floating days to be
+                    href='javascript:void(0);' onclick='side_menu_click("floating")'>a. For time spending shipyards areas, floating days to be
                     charged (Excluded Port Authority wharfage charges)</a> </li>
                 <li> <a href="#link6">b. For Mooring and Unmooring Operation</a> </li>
               </ul>
@@ -190,7 +190,7 @@
           </li> 
       </ul>
   </div>
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js" type = "text/javascript"></script> 
+  <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js" type = "text/javascript"></script>  -->
   <script src="js/file-explore.js" type = "text/javascript"></script> 
   <script>
   $(document).ready(function() {
@@ -300,21 +300,7 @@
       
       });
     }
-    function dockageClick() {
-      // enableSideMenu("all");
-      disableSideMenu("dockage");
-      // $(document).ready(function () {
-      //   $('.dockage').click(function () {
-      //     $('#dockage').load('php/dockage.php');
-      //   });
-      // });
-
-      // $.get("php/dockage.php",function(data) {
-      //     $("#dockage").html(data);
-      
-      // });
-      // alert("DOCKAGE");
-    }
+  
     function floatingClick() {
       // alert("Floating in menu file");
       // enableSideMenu("all");

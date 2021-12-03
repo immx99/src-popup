@@ -216,7 +216,7 @@ function percent() {
 
 function showServiceItem(serviceID,srcData,selectedData) {
   // console.log(selectedData);
-  console.log("serviceID=" + serviceID);
+  // console.log("serviceID=" + serviceID);
   let htmlString="";
   let dckgData="";
   let grossTon;
@@ -267,7 +267,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
         htmlServiceDataString+="</select></td>";
         break;
     case "floating":
-        
+        titleA="FLOATING CHARGE IN SHIPYARD AREA";
         title="a. For time spending shipyard areas, floating days to be charged (Excluded Port Authority wharfage charges)";
 
         if (grossTon=="Up to 300" || grossTon=="301 - 500") {
@@ -289,7 +289,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
         htmlRateString+="<td><input type='text' id='rate' name='rate' value='" + 
         formatNumber(srcData.FloatingData[j].rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";
         htmlServiceDataString+='<tr><td><select name="serviceItem" id="serviceItem" onchange="return setRate(\'floating\');">';
-        console.log(htmlServiceDataString);
+        // console.log(htmlServiceDataString);
         for (let i=0; i<srcData.FloatingItemData.length;i++) {
             if (serviceItem==srcData.FloatingItemData[i].service_item) {
                 htmlServiceDataString+= '<option value="' + srcData.FloatingItemData[i].service_item + '" selected>' + srcData.FloatingItemData[i].service_item + '</option>';
@@ -301,7 +301,10 @@ function showServiceItem(serviceID,srcData,selectedData) {
         htmlServiceDataString+="</select></td>";
         break;
 }
-  htmlString+='<div class="card">';
+  // htmlString+='<div class="card">';
+  // htmlString+='<div class="card-header">';
+  // htmlString+='<h4 id="judulA">' + titleA + '</h4>';
+  // htmlString+='</div>';
   htmlString+='<div class="card-header">';
   htmlString+='<h4 id="judul">' + title + '</h4>';
   htmlString+='</div>';
@@ -349,7 +352,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
   htmlString+='<div class="card-footer">';
   htmlString+='<button type="button" id="proceedBtn" class="btn btn-primary float-right">Proceed</button>';
   htmlString+='</div>';  //end-card-footers
-  htmlString+='</form>';
+  // htmlString+='</form>';
   htmlString+='</div>';  //end-card
   
   document.querySelector(".popup .form").innerHTML=htmlString;
@@ -404,8 +407,12 @@ function showServiceItem(serviceID,srcData,selectedData) {
               // console.log("newService Access=" + newServiceAccess);
     
               if (newServiceAccess==true) {
-                  document.querySelector("#container #grandTotal").insertAdjacentHTML("beforebegin", str.split("|")[0]); 
-                  // document.querySelector("#container #grandTotal").insertAdjacentHTML("beforebegin", str.split("|")[1]); 
+                  // if (serviceID=="floating") { 
+                  //   document.querySelector("#container #grandTotal").insertAdjacentHTML("beforebegin", str.split("|")[4]);
+                  // }
+                  document.querySelector("#container #grandTotal").insertAdjacentHTML("beforebegin", str.split("|")[0]);    //new service item
+                  document.querySelector("#container #grandTotal").insertAdjacentHTML("beforebegin", str.split("|")[1]);   //service Total
+                
                   newServiceAccess=false;
               } else {
                   if (serviceID=="dockage") {
@@ -447,6 +454,7 @@ function proceedClick(serviceID,newAccess) {
   let htmlString="";
   let htmlTotalString="";
   let htmlGrandTotalString="";
+  let htmlSpecialTitleString="";
   let countServiceItem=0;
   if (newAccess==true) {
      
@@ -489,6 +497,7 @@ function proceedClick(serviceID,newAccess) {
               break; 
           case "floating":
               iFloat++;
+            
               htmlString+='<tr><td width="80%" style="text-align:right" >Floating Charge Total: ( ' + iFloat + ' )</td>';
               totalFlt+=unformatNumber(document.getElementById("charge").value);  
               htmlString+= "<td style='text-align:right'>" + formatNumber(totalFlt) + "</td></tr>";  
@@ -545,6 +554,10 @@ function proceedClick(serviceID,newAccess) {
         case "floating":
             if ( newFloatingAccess==true) {
               htmlString+='<div class="card-header">';
+              htmlString+='<h4 id="title">FLOATING CHARGE IN SHIPYARD AREA</h4>';
+              htmlString+='</div>';
+          
+              htmlString+='<div class="card-header">';
               htmlString+='<h4 id="title">' + title + '</h4>';
               htmlString+='</div>';
               htmlString+='<div class="card-body">';
@@ -586,10 +599,10 @@ function proceedClick(serviceID,newAccess) {
       htmlString+="<td style='text-align:right'>" + formatNumber(grandTotal) + "</td></tr></table>";
       htmlString+='</div>';  //end grand total
       htmlString+= "|" + countServiceItem;
-
+      // htmlString+= "|" + htmlSpecialTitleString;
   }
  
-  // 
+//  console.log(htmlString);
      
   return htmlString;
 

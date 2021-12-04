@@ -198,7 +198,7 @@
             });
   </script>
   <div class="fullscreen-container">
-    <div class="popup" id="popup">
+    <div class="popup-login" id="popup-login">
         <div class="close-btn">&times;</div>
         <div class="form">
             <h2>Login</h2>
@@ -222,6 +222,12 @@
             </div>
         </div>
     </div> 
+    <div class="popup-service-item" id="popup-service-item">
+     <div class="si-close-btn">&times;</div>
+        <div class="si-form">
+            
+        </div>
+    </div>
   </div>  
   <script>
     function disableSideMenu(str) {

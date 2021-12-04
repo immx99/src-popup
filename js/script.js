@@ -10,17 +10,23 @@ var newDockageAccess=true;
 var newFloatingAccess=true;
 var newServiceAccess=true;
 
-document.querySelector(".popup .close-btn").addEventListener("click",function() {
-  document.querySelector(".popup").classList.remove("active");
+document.querySelector(".popup-service-item .si-close-btn").addEventListener("click",function() {
+  document.querySelector(".popup-service-item").classList.remove("active");
   $(document).ready(function(){
     $(".fullscreen-container").fadeOut(200);
   }); 
 });
 
+document.querySelector(".popup-login .close-btn").addEventListener("click",function() {
+  document.querySelector(".popup-login").classList.remove("active");
+  $(document).ready(function(){
+    $(".fullscreen-container").fadeOut(200);
+  }); 
+});
 
 function loginClick() {
   showLoginForm();
-  document.querySelector(".popup").classList.add("active");
+  document.querySelector(".popup-login").classList.add("active");
   $(document).ready(function(){
     $(".fullscreen-container").fadeTo(200,1);
   });
@@ -54,7 +60,7 @@ function side_menu_click(srvID) {
       }
     })
   
-    document.querySelector(".popup").classList.add("active");
+    document.querySelector(".popup-service-item").classList.add("active");
     $(document).ready(function(){
       $(".fullscreen-container").fadeTo(200,1);
     });
@@ -355,7 +361,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
   // htmlString+='</form>';
   htmlString+='</div>';  //end-card
   
-  document.querySelector(".popup .form").innerHTML=htmlString;
+  document.querySelector(".popup-service-item .si-form").innerHTML=htmlString;
   
   $(document).ready(function () {	
     $('#minusBtn').click(function () {	
@@ -389,7 +395,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
           $(document).ready(function(){
             $(".fullscreen-container").fadeOut(200);
           }); 
-          document.querySelector(".popup").classList.remove("active");  
+          document.querySelector(".popup-service-item").classList.remove("active");  
           // document.getElementById("container").insertAdjacentHTML("afterend",proceedClick());
           str=document.getElementById("container").outerHTML;
 
@@ -436,7 +442,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
           $(document).ready(function(){
             $('#addBtn').click(function () {
               // console.log("clickADD");
-              document.querySelector(".popup").classList.add("active");
+              document.querySelector(".popup-service-item").classList.add("active");
               $(document).ready(function(){
                 $(".fullscreen-container").fadeTo(200,1);
               });
@@ -702,7 +708,7 @@ function showLoginForm() {
   htmlString+='<div class="form-element"> <input type="checkbox" id="remember-me"> <label for="remember-me">Remember Me</label></div>';
   htmlString+='<div class="form-element"> <button>Sign in</button> </div>';
   htmlString+='<div class="form-element"><a href="#">Forgot Password?</a></div>';
-  document.querySelector(".popup .form").innerHTML=htmlString;
+  document.querySelector(".popup-login .form").innerHTML=htmlString;
   return htmlString;
 }
 

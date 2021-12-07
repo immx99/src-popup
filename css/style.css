@@ -7,19 +7,38 @@ td {
 } */
 
 div.container {
-  position: absolute;
-  overflow: scroll;
-  height:690px;
-  width:1024px;
-  border-radius: 30px;
-  /* padding:25px; */
-  margin: 0px 0px 0px 500px;
+  margin-left: 0;
+  height:640px;
+  width: 1024px;
+  /* border-style:ridge; */
+  /* border-right: double; */
+  /* border-style: ridge; */
+  border-width: 7px;
+  /* border-color: coral; */
+  background-color: #b39929;
+  color: black;
+  float: left;
+  overflow: auto;
 }
+div.button-panel {
+  margin-left: 0;
+  height:50px;
+  width: 1024px;
+  /* border-style:ridge; */
+  /* border-right: double; */
+  /* border-style: ridge; */
+  border-width: 7px;
+  /* border-color: coral; */
+  background-color: #b3babe;
+  color: black;
+  float: left;
+  overflow: auto;
+} 
 
 .menu {
   background: #0A62A9;
   height: 4rem;
-}
+} 
 
 
 .menu ol {

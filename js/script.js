@@ -421,7 +421,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
           if (str.indexOf("card-footer")==-1) {
               newAccess=true;
               newServiceAccess=false;
-              document.getElementById("container").innerHTML=proceedClick(serviceID,newAccess);
+              document.getElementById("container").innerHTML=proceedClick(serviceID,newAccess).split("|")[0];
+              document.getElementById("button-panel").innerHTML=proceedClick(serviceID,newAccess).split("|")[1];;
           } else {
               newAccess=false;
               // document.querySelector("#container .card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
@@ -527,6 +528,7 @@ function mooring(grossTon,srcData,serviceItem) {
 function proceedClick(serviceID,newAccess) {
   let htmlString="";
   let htmlTotalString="";
+  let htmlButtonString="";
   let htmlGrandTotalString="";
   let htmlSpecialTitleString="";
   let countServiceItem=0;
@@ -554,13 +556,13 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
       htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
       htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
-      htmlString+='<tr><td colspan="3" width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+      htmlString+='<tr><td width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
       htmlString+= document.getElementById("rate").value;
       if (document.getElementById("workingTime").style.visibility=="visible") {
           htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
           htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
       }
-      htmlString+='</table>';
+      htmlString+='</td><td></td><td></td></tr></table>';
       htmlString+="<div id='" + serviceID + "Total'>";
       htmlString+='<table width=98% id=' + serviceID + 'TblTotal">';
      
@@ -604,9 +606,9 @@ function proceedClick(serviceID,newAccess) {
      
       htmlString+='<div class="card-footer">';
       // htmlString+='<button type="button" id= "dckgDeleteBtn" class="btn btn-warning float-right">Delete</button>';
-      htmlString+='<button type="button" id="saveBtn" class="btn btn-info float-right">Save</button>';
-      htmlString+='<button type="button" id="savePrintBtn" class="btn btn-info float-right">Save & Print</button>';
-      htmlString+='<button type="button" id= "addBtn" class="btn btn-success float-right">Add</button>';
+      htmlButtonString+='<button type="button" id="saveBtn" class="btn btn-info float-right">Save</button>';
+      htmlButtonString+='<button type="button" id="savePrintBtn" class="btn btn-info float-right">Save & Print</button>';
+      htmlButtonString+='<button type="button" id= "addBtn" class="btn btn-success float-right">Add</button>';
       // htmlString+='<button type="button" id= "dckgEditBtn" class="btn btn-info float-right" disabled>Edit</button>';
       htmlString+='</div>';  //end-card-footers
       htmlString+='</div>';  //end-card
@@ -621,6 +623,7 @@ function proceedClick(serviceID,newAccess) {
             newMooringAccess=false;
             break;
       }
+      htmlString+="|" + htmlButtonString;
   } else {
     htmlTotalString+="<div id='" + serviceID + "Total'>";
      htmlTotalString+="<table width='98%' id='" + serviceID + "Total'>";
@@ -692,15 +695,14 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
       htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
       htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
-      htmlString+='<tr><td colspan="3" width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+      htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
       htmlString+= document.getElementById("rate").value;
       if (document.getElementById("workingTime").style.visibility=="visible") {
           htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
           htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
       }
-      htmlString+= "</td>"; 
-     
-      htmlString+='</table>';
+  
+      htmlString+='</td><td></td><td></td></tr></table>';
     
       htmlString+="|";
       htmlString+=  htmlTotalString;   

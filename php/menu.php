@@ -330,7 +330,8 @@
 
 
   </script>
-  <div id="container"></div>  
+  <div id="container" class="container"></div>  
+  <div id="button-panel" class="button-panel"></div>
   <script src="js/script.js"></script>
   </body>
 </html>

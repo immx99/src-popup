@@ -609,6 +609,7 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='<button type="button" id= "addBtn" class="btn btn-success float-right">Add</button>';
       // htmlString+='<button type="button" id= "dckgEditBtn" class="btn btn-info float-right" disabled>Edit</button>';
       htmlString+='</div>';  //end-card-footers
+      htmlString+='</div>';  //end-card
       switch(serviceID) {
         case "dockage":
             newDockageAccess=false;
@@ -629,7 +630,7 @@ function proceedClick(serviceID,newAccess) {
               htmlString+='<div class="card-header">';
               htmlString+='<h4 id="title">' + title + '</h4>';
               htmlString+='</div>';
-              htmlString+='<div class="card-body">';
+              // htmlString+='<div class="card-body">';
               newDockageAccess=false;
             }
             iDckg++;
@@ -651,7 +652,7 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+='<div class="card-header">';
                 htmlString+='<h4 id="title">' + title + '</h4>';
                 htmlString+='</div>';
-                htmlString+='<div class="card-body">';
+                // htmlString+='<div class="card-body">';
                 newFloatingAccess=false;
             }
             iFloat++;
@@ -672,7 +673,7 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+='<div class="card-header">';
                 htmlString+='<h4 id="title">' + title + '</h4>';
                 htmlString+='</div>';
-                htmlString+='<div class="card-body">';
+                // htmlString+='<div class="card-body">';
                 // console.log("cetak header");
                 newMooringAccess=false;
             }
@@ -700,7 +701,7 @@ function proceedClick(serviceID,newAccess) {
       htmlString+= "</td>"; 
      
       htmlString+='</table>';
-      htmlString+='</div>';  //end-card
+    
       htmlString+="|";
       htmlString+=  htmlTotalString;   
       htmlString+='</table>';

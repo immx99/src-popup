@@ -60,7 +60,8 @@
                 <li class='active' id='liFloating'><a id='side-menu-floating' class='nav-link floating'
                     href='javascript:void(0);' onclick='side_menu_click("floating")'>a. For time spending shipyards areas, floating days to be
                     charged (Excluded Port Authority wharfage charges)</a> </li>
-                <li> <a href="#link6">b. For Mooring and Unmooring Operation</a> </li>
+                <li> <a a id='side-menu-mooring' class='nav-link mooring'
+                    href='javascript:void(0);' onclick='side_menu_click("mooring")'>b. For Mooring and Unmooring Operation</a> </li>
               </ul>
               </li>
               <li><a href="#link2">3. Dock Block Removal</a> </li>
@@ -243,6 +244,11 @@
           $("#liFloating").addClass("disabled");// for 2nd li disable  
           document.getElementById('side-menu-floating').style.color="grey";
           break;
+        case 'mooring':
+          $("#liMooring").removeClass("active");// 
+          $("#liMooring").addClass("disabled");// for 2nd li disable  
+          document.getElementById('side-menu-mooring').style.color="grey";
+          break;  
         case "all":
         //   $("#liGeneral").removeClass("active");// 
         //   $("#liGeneral").addClass("disabled");// for 2nd li disable  
@@ -266,6 +272,11 @@
         case "floating":
           $("#liFloating").removeClass("disabled");// 
           $("#liFloating").addClass("enabled");// for 2nd li enable  
+          document.getElementById('side-menu-floating').style.color="black";
+          break;
+        case "mooring":
+          $("#liMooring").removeClass("disabled");// 
+          $("#liMooring").addClass("enabled");// for 2nd li enable  
           document.getElementById('side-menu-floating').style.color="black";
           break;
         case "all":

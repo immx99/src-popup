@@ -8,8 +8,8 @@ td {
 
 div.container {
   margin-left: 0;
-  height:640px;
-  width: 1024px;
+  height:650px;
+  width: 67%;
   /* border-style:ridge; */
   /* border-right: double; */
   /* border-style: ridge; */
@@ -22,8 +22,8 @@ div.container {
 }
 div.button-panel {
   margin-left: 0;
-  height:50px;
-  width: 1024px;
+  height:40px;
+  width: 67%;
   /* border-style:ridge; */
   /* border-right: double; */
   /* border-style: ridge; */

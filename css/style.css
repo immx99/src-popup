@@ -8,8 +8,11 @@ td {
 
 div.container {
   margin-left: 0;
+  /* margin-right: 0; */
+  margin-right:auto;
   height:650px;
-  width: 67%;
+  width:67%;
+  /* max-width: 1020px; */
   /* border-style:ridge; */
   /* border-right: double; */
   /* border-style: ridge; */
@@ -19,11 +22,19 @@ div.container {
   color: black;
   float: left;
   overflow: auto;
+  /* display:flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-flow: wrap; */
+
 }
 div.button-panel {
   margin-left: 0;
+  /* margin-right: 0; */
+  margin-right: auto;
   height:40px;
-  width: 67%;
+  /* max-width:1020px; */
+  width:67%;
   /* border-style:ridge; */
   /* border-right: double; */
   /* border-style: ridge; */
@@ -33,6 +44,11 @@ div.button-panel {
   color: black;
   float: left;
   overflow: auto;
+  /* display:flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-flow: wrap;
+   */
 } 
 
 .menu {
@@ -111,9 +127,35 @@ div.button-panel {
 }
 
 
+
+@media screen and (max-width: 1450px) {
+  .container {
+    width:600px;
+  }
+  .button-panel {
+    width:600px;
+  }
+}
+
+
+
 @media screen and (max-width: 600px) {
   .sub-menu .menu-item {
     background: #C06C84;
+  }
+  .container {
+    width:500px;
+  }
+  .button-panel {
+    width:500px;
+  }
+  .popup-service-item {
+    width:500px;
+    transform: translate(-50%,-50%) scale(1);
+    padding: 5px 5px;
+  }
+  .side-menu {
+    width:500px;
   }
 }
 
@@ -195,7 +237,9 @@ div.button-panel {
 div.side-menu{
     margin-left: 0;
     height:690px;
-    width: 500px;
+    width:33%;
+    max-width: 500px;
+    min-width:300px;
     /* border-style:ridge; */
     /* border-right: double; */
    /* border-style: ridge; */
@@ -271,7 +315,7 @@ h4 {
 html, body {
   font-size: 15px;
   /* font-family: "Fira Mono", monospace; */
-  margin: 0;
+  margin: 0px 0px 0px 0px;
   /* background: rgb(255, 255, 255); */
   background: rgb(234, 234, 238);
   height: 100vh;
@@ -367,8 +411,8 @@ a.enabled       {
     left: 50%;
     opacity: 0;
     transform: translate(-50%,-50%) scale(1.25);
-    width: 700px;
-    padding: 20px 30px;
+    max-width: 700px;
+    padding: 10px 10px;
     background: #ffff;
     box-shadow: 2px 5px 5px rgba(0,0,0,0,15);
     border-radius: 10px;

@@ -8,14 +8,10 @@ td {
 
 div.container {
   margin-left: 0;
-  /* margin-right: 0; */
   margin-right:auto;
   height:650px;
   width:67%;
-  /* max-width: 1020px; */
-  /* border-style:ridge; */
-  /* border-right: double; */
-  /* border-style: ridge; */
+ 
   border-width: 7px;
   /* border-color: coral; */
   background-color: #b39929;
@@ -30,14 +26,10 @@ div.container {
 }
 div.button-panel {
   margin-left: 0;
-  /* margin-right: 0; */
   margin-right: auto;
   height:40px;
   /* max-width:1020px; */
   width:67%;
-  /* border-style:ridge; */
-  /* border-right: double; */
-  /* border-style: ridge; */
   border-width: 7px;
   /* border-color: coral; */
   background-color: #b3babe;
@@ -49,6 +41,15 @@ div.button-panel {
   justify-content: space-around;
   flex-flow: wrap;
    */
+} 
+
+
+.edit-and-delete-div  {
+  display:none;
+}
+
+.edit-and-delete-column:hover .edit-and-delete-div {
+  display:block;
 } 
 
 .menu {
@@ -127,8 +128,7 @@ div.button-panel {
 }
 
 
-
-@media screen and (max-width: 1450px) {
+media screen and (max-width: 1450px) {
   .container {
     width:600px;
   }
@@ -136,7 +136,7 @@ div.button-panel {
     width:600px;
   }
 }
-
+@
 
 
 @media screen and (max-width: 600px) {

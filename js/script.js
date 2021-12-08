@@ -1,3 +1,4 @@
+
 var iDckg=0;
 var iFloat=0;
 var iMoor=0;
@@ -410,7 +411,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
     $('#proceedBtn').click(function () {
           let str;
           let newAccess;
-         
+          let htmlString="";
           $(document).ready(function(){
             $(".fullscreen-container").fadeOut(200);
           }); 
@@ -421,8 +422,9 @@ function showServiceItem(serviceID,srcData,selectedData) {
           if (str.indexOf("card-footer")==-1) {
               newAccess=true;
               newServiceAccess=false;
-              document.getElementById("container").innerHTML=proceedClick(serviceID,newAccess).split("|")[0];
-              document.getElementById("button-panel").innerHTML=proceedClick(serviceID,newAccess).split("|")[1];;
+              htmlString=proceedClick(serviceID,newAccess);
+              document.getElementById("container").innerHTML=htmlString.split("|")[0];
+              document.getElementById("button-panel").innerHTML=htmlString.split("|")[1];;
           } else {
               newAccess=false;
               // document.querySelector("#container .card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
@@ -562,7 +564,13 @@ function proceedClick(serviceID,newAccess) {
           htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
           htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
       }
-      htmlString+='</td><td></td><td></td></tr></table>';
+      htmlString+='</td><td></td>';
+      htmlString+='<td class="edit-and-delete-column">'; 
+      htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
+      htmlString+='<button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
+      // htmlString+='<button type="button" id="btn-edit" class="btn"><span>Edit </span></button>';
+      // htmlString+='<button type="button" id="btn-delete" class="btn"><span>Delete</span></button>';
+      htmlString+='</div></td></tr></table>';
       htmlString+="<div id='" + serviceID + "Total'>";
       htmlString+='<table width=98% id=' + serviceID + 'TblTotal">';
      
@@ -596,19 +604,21 @@ function proceedClick(serviceID,newAccess) {
       htmlString+="</div>"; ///end div service Total
       htmlString+="<div id='grandTotal'>";
       htmlString+='<table width=98% id="tblGrandTotal">';
-      htmlString+='<tr><td width="80%" style="text-align:right" >Grand Total</td>';
+      htmlString+='<tr><td width="80%" style="text-align:right" ><b>Grand Total</b></td>';
       htmlString+="<td size='1'  style='text-align:right'>Rp. </td>";
       grandTotal+=parseFloat(unformatNumber(document.getElementById("charge").value));  
-      htmlString+="<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr></table>";
+      htmlString+="<td style='text-align:right'><b>" + document.getElementById("charge").value + "</b></td></tr></table>";
       htmlString+='</div>';  //end grand total
       htmlString+='</div>';  //end card-body   
       newServiceItemAccess=false;   
      
       htmlString+='<div class="card-footer">';
       // htmlString+='<button type="button" id= "dckgDeleteBtn" class="btn btn-warning float-right">Delete</button>';
-      htmlButtonString+='<button type="button" id="saveBtn" class="btn btn-info float-right">Save</button>';
-      htmlButtonString+='<button type="button" id="savePrintBtn" class="btn btn-info float-right">Save & Print</button>';
-      htmlButtonString+='<button type="button" id= "addBtn" class="btn btn-success float-right">Add</button>';
+      htmlButtonString+='<div class="d-grid gap-2 d-md-flex justify-content-md-end">';
+      htmlButtonString+='<button type="button" id= "addBtn" class="btn btn-success  me-md-2 float-right"><span class="glyphicon glyphicon-plus"> Add </span></button>';
+      htmlButtonString+='<button type="button" id="saveBtn" class="btn btn-info me-md-2 float-right"><span class="glyphicon glyphicon-floppy-saved"> Save </span></button>';
+      htmlButtonString+='<button type="button" id="savePrintBtn" class="btn btn-info me-md-2 float-right"><span class="glyphicon glyphicon-print"> Save & Print </span></button>';
+     
       // htmlString+='<button type="button" id= "dckgEditBtn" class="btn btn-info float-right" disabled>Edit</button>';
       htmlString+='</div>';  //end-card-footers
       htmlString+='</div>';  //end-card
@@ -702,7 +712,14 @@ function proceedClick(serviceID,newAccess) {
           htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
       }
   
-      htmlString+='</td><td></td><td></td></tr></table>';
+      htmlString+='</td><td></td>';
+      htmlString+='<td class="edit-and-delete-column">'; 
+      htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
+      htmlString+='<button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
+      // htmlString+='<button type="button" id="btn-edit" class="btn"><span>Edit </span></button>';
+      // htmlString+='<button type="button" id="btn-delete" class="btn"><span>Delete</span></button>';
+      htmlString+='</div></td></tr></table>';
+      htmlString+='</td></tr></table>';
     
       htmlString+="|";
       htmlString+=  htmlTotalString;   
@@ -711,9 +728,9 @@ function proceedClick(serviceID,newAccess) {
       grandTotal+=parseFloat(unformatNumber(document.getElementById("charge").value));
       htmlString+="<div id='grandTotal'>";
       htmlString+='<table width=98% id="tblGrandTotal">';
-      htmlString+='<tr><td width="80%" style="text-align:right" >Grand Total</td>';
+      htmlString+='<tr><td width="80%" style="text-align:right" ><b>Grand Total</b></td>';
       htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
-      htmlString+="<td style='text-align:right'>" + formatNumber(grandTotal) + "</td></tr></table>";
+      htmlString+="<td style='text-align:right'><b>" + formatNumber(grandTotal) + "</b></td></tr></table>";
       htmlString+='</div>';  //end grand total
       htmlString+= "|" + countServiceItem;
       // htmlString+= "|" + htmlSpecialTitleString;

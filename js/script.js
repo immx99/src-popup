@@ -473,6 +473,10 @@ function showServiceItem(serviceID,srcData,selectedData) {
                 $(".fullscreen-container").fadeTo(200,1);
               });
             });
+            $("#tblServiceItemsData").on('click','.btnDelete',function(){
+              $(this).closest('table').remove();
+             
+           });
           });
             
     });
@@ -567,9 +571,7 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='</td><td></td>';
       htmlString+='<td class="edit-and-delete-column">'; 
       htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
-      htmlString+='<button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
-      // htmlString+='<button type="button" id="btn-edit" class="btn"><span>Edit </span></button>';
-      // htmlString+='<button type="button" id="btn-delete" class="btn"><span>Delete</span></button>';
+      htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
       htmlString+='</div></td></tr></table>';
       htmlString+="<div id='" + serviceID + "Total'>";
       htmlString+='<table width=98% id=' + serviceID + 'TblTotal">';
@@ -615,9 +617,9 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='<div class="card-footer">';
       // htmlString+='<button type="button" id= "dckgDeleteBtn" class="btn btn-warning float-right">Delete</button>';
       htmlButtonString+='<div class="d-grid gap-2 d-md-flex justify-content-md-end">';
-      htmlButtonString+='<button type="button" id= "addBtn" class="btn btn-success  me-md-2 float-right"><span class="glyphicon glyphicon-plus"> Add </span></button>';
-      htmlButtonString+='<button type="button" id="saveBtn" class="btn btn-info me-md-2 float-right"><span class="glyphicon glyphicon-floppy-saved"> Save </span></button>';
-      htmlButtonString+='<button type="button" id="savePrintBtn" class="btn btn-info me-md-2 float-right"><span class="glyphicon glyphicon-print"> Save & Print </span></button>';
+      htmlButtonString+='<button type="button" id= "addBtn" class="btn btn-success  me-md-2 float-right"><span class="glyphicon glyphicon-plus"  aria-hidden="true"> Add </span></button>';
+      htmlButtonString+='<button type="button" id="saveBtn" class="btn btn-info me-md-2 float-right"><span class="glyphicon glyphicon-floppy-saved"  aria-hidden="true"> Save </span></button>';
+      htmlButtonString+='<button type="button" id="savePrintBtn" class="btn btn-info me-md-2 float-right"><span class="glyphicon glyphicon-print"  aria-hidden="true"> Save & Print </span></button>';
      
       // htmlString+='<button type="button" id= "dckgEditBtn" class="btn btn-info float-right" disabled>Edit</button>';
       htmlString+='</div>';  //end-card-footers
@@ -715,12 +717,9 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='</td><td></td>';
       htmlString+='<td class="edit-and-delete-column">'; 
       htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
-      htmlString+='<button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
-      // htmlString+='<button type="button" id="btn-edit" class="btn"><span>Edit </span></button>';
-      // htmlString+='<button type="button" id="btn-delete" class="btn"><span>Delete</span></button>';
+      htmlString+='<button type="button" class="btn btn-default btn-sm btndel" onclick="SomeDeleteRowFunction(this)"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
       htmlString+='</div></td></tr></table>';
-      htmlString+='</td></tr></table>';
-    
+     
       htmlString+="|";
       htmlString+=  htmlTotalString;   
       htmlString+='</table>';
@@ -825,6 +824,14 @@ function setRate(serviceID) {
   })
   
   // document.getElementById("charge").value=calculate();
+}
+
+function SomeDeleteRowFunction(btndel) {
+  if (typeof(btndel) == "object") {
+      $(btndel).closest("table").remove();
+  } else {
+      return false;
+  }
 }
 
 function showHideField() {

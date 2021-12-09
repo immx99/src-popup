@@ -9,38 +9,39 @@ td {
 div.container {
   margin-left: 0;
   margin-right:auto;
-  height:650px;
+  /* height:650px; */
+  height:86%;
   width:67%;
- 
+  /* max-width: 900px; */
+  /* border-style:ridge; */
+  /* border-right: double; */
+  /* border-style: ridge; */
   border-width: 7px;
   /* border-color: coral; */
   background-color: #b39929;
   color: black;
   float: left;
   overflow: auto;
-  /* display:flex;
-  flex-direction: row;
-  justify-content: space-around;
-  flex-flow: wrap; */
-
+ 
 }
 div.button-panel {
   margin-left: 0;
-  margin-right: auto;
-  height:40px;
-  /* max-width:1020px; */
+  margin-right:auto;
+  /* height:40px; */
+  height:5%;
   width:67%;
+  /* max-width:900px; */
+  /* max-width: 900px; */
+  /* border-style:ridge; */
+  /* border-right: double; */
+  /* border-style: ridge; */
   border-width: 7px;
   /* border-color: coral; */
   background-color: #b3babe;
   color: black;
   float: left;
   overflow: auto;
-  /* display:flex;
-  flex-direction: row;
-  justify-content: space-around;
-  flex-flow: wrap;
-   */
+  
 } 
 
 
@@ -52,9 +53,11 @@ div.button-panel {
   display:block;
 } 
 
+
 .menu {
   background: #0A62A9;
-  height: 4rem;
+  /* height: 4rem; */
+  height:9%;
 } 
 
 
@@ -128,15 +131,16 @@ div.button-panel {
 }
 
 
-media screen and (max-width: 1450px) {
+
+@media screen and (max-width: 1050px) {
   .container {
-    width:600px;
+    width:500px;
   }
   .button-panel {
-    width:600px;
+    width:500px;
   }
 }
-@
+
 
 
 @media screen and (max-width: 600px) {
@@ -144,10 +148,10 @@ media screen and (max-width: 1450px) {
     background: #C06C84;
   }
   .container {
-    width:500px;
+    width:100px;
   }
   .button-panel {
-    width:500px;
+    width:100px;
   }
   .popup-service-item {
     width:500px;
@@ -155,7 +159,7 @@ media screen and (max-width: 1450px) {
     padding: 5px 5px;
   }
   .side-menu {
-    width:500px;
+    width:100px;
   }
 }
 
@@ -236,10 +240,10 @@ media screen and (max-width: 1450px) {
 
 div.side-menu{
     margin-left: 0;
-    height:690px;
+    /* height:690px; */
+    height:91%;
     width:33%;
     max-width: 500px;
-    min-width:300px;
     /* border-style:ridge; */
     /* border-right: double; */
    /* border-style: ridge; */

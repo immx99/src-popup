@@ -2,7 +2,7 @@
 var iDckg=0;
 var iFloat=0;
 var iMoor=0;
-var totalDckg=0;
+var dckgTotal=0;
 var totalFloat=0;
 var totalMoor=0;
 var grandTotal=0;
@@ -13,7 +13,7 @@ var newDockageAccess=true;
 var newFloatingAccess=true;
 var newMooringAccess=true;
 var newServiceAccess=true;
-
+var newCount=true;
 document.querySelector(".popup-service-item .si-close-btn").addEventListener("click",function() {
   document.querySelector(".popup-service-item").classList.remove("active");
   $(document).ready(function(){
@@ -429,31 +429,35 @@ function showServiceItem(serviceID,srcData,selectedData) {
               newAccess=false;
               // document.querySelector("#container .card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
               str=proceedClick(serviceID,newAccess);
-              if ( parseInt(str.split("|")[3])>1) {
+              if ( parseInt(str.split("|")[3])==1) {
+                  newServiceAccess=true;
+              } else {
                   newServiceAccess=false;
               }
-              // console.log("newService Access=" + newServiceAccess);
+              console.log("newService Access=" + newServiceAccess + "=======" + parseInt(str.split("|")[3]));
     
               if (newServiceAccess==true) {
                   // if (serviceID=="floating") { 
                   //   document.querySelector("#container #grandTotal").insertAdjacentHTML("beforebegin", str.split("|")[4]);
                   // }
                   document.querySelector("#container #grandTotal").insertAdjacentHTML("beforebegin", str.split("|")[0]);    //new service item
-                  document.querySelector("#container #grandTotal").insertAdjacentHTML("beforebegin", str.split("|")[1]);   //service Total
-                
+                  document.querySelector("#container #grandTotal").insertAdjacentHTML("beforebegin", str.split("|")[1]);   //service Total 
                   newServiceAccess=false;
               } else {
                   if (serviceID=="dockage") {
   
                       document.getElementById("dockageTotal").insertAdjacentHTML("beforebegin", str.split("|")[0]);
+                      document.getElementById("dockageTotal").innerHTML="";
                       document.getElementById("dockageTotal").innerHTML=str.split("|")[1];
                   }
                   if (serviceID=="floating") { 
                     document.getElementById("floatingTotal").insertAdjacentHTML("beforebegin", str.split("|")[0]);
-                     document.getElementById("floatingTotal").innerHTML=str.split("|")[1];
+                    document.getElementById("floatingTotal").innerHTML="";
+                      document.getElementById("floatingTotal").innerHTML=str.split("|")[1];
                   }
                   if (serviceID=="mooring") { 
                     document.getElementById("mooringTotal").insertAdjacentHTML("beforebegin", str.split("|")[0]);
+                    document.getElementById("mooringTotal").innerHTML="";
                     document.getElementById("mooringTotal").innerHTML=str.split("|")[1];
                  }
               
@@ -473,15 +477,52 @@ function showServiceItem(serviceID,srcData,selectedData) {
                 $(".fullscreen-container").fadeTo(200,1);
               });
             });
+            
             $("#tblServiceItemsData").on('click','.btnDelete',function(){
-              $(this).closest('table').remove();
-             
-           });
+                var deleteRate=parseFloat(unformatNumber($(this).closest('table').find('#charge').text()));
+                console.log($(this).closest('tr').index());
+                var serviceID=$(this).closest('tr').find('#tdServiceID').text();
+                console.log(newCount);
+                console.log(deleteRate);
+                console.log(serviceID);
+                if (newCount) {
+                   switch (serviceID) {
+                        case "dockage":
+                            console.log($(this).closest('.card-body').find("#tdDockageTotal").text());
+                            dckgTotal=unformatNumber($(this).closest('.card-body').find("#tdDockageTotal").text());
+                            // console.log(document.getElementById("tdDockageTotal").outerHTML);
+                            dckgTotal-=deleteRate;
+                            document.getElementById("tdDockageTotal").innerHTML=formatNumber(dckgTotal);
+                            // console.log("dckgTotal=" + dckgTotal);
+                            console.log($(this).closest('.card-body').find("#tdDockageCount").text());
+                            console.log($(this).closest('.card-body').find("#tdDockageCount").text().split(" ")[4]);
+                            iDckg=parseInt($(this).closest('.card-body').find("#tdDockageCount").text().split(" ")[4]) - 1;
+                            // var iDckgx=document.getElementById("tdDockageCount").outerHTML;
+                            // console.log("iDckgX=" + iDckgx);
+                            document.getElementById("tdDockageCount").innerHTML= 'Dockage Charge Total: ( ' + iDckg.toString() + ' )';
+                            break;
+                        case "floating":
+                            break;
+                        case "mooring":
+                            break;
+                    }
+                    console.log($(this).closest('.card-body').find("#tdGrandTotal").text());
+                    grandTotal=unformatNumber($(this).closest('.card-body').find("#tdGrandTotal").text());
+                    grandTotal-=deleteRate;
+                    // // console.log( dckgTotal );
+                    // console.log(grandTotal);
+                    document.getElementById("tdGrandTotal").innerHTML=formatNumber(grandTotal);
+                    newCount=false;
+                }
+                $(this).closest('table').remove();
+                // newCount=true;
           });
+           
+      });
             
     });
   });  
-  
+  newCount=true;
   // console.log(htmlString);
   return 0;
 }
@@ -561,14 +602,14 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='<table width=98% id="tblServiceItemsData">';
       htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
       htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
-      htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
+      htmlString+= "<td style='text-align:right' id='charge'>" + document.getElementById("charge").value + "</td></tr>";  
       htmlString+='<tr><td width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
       htmlString+= document.getElementById("rate").value;
       if (document.getElementById("workingTime").style.visibility=="visible") {
           htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
           htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
       }
-      htmlString+='</td><td></td>';
+      htmlString+='</td><td id="tdServiceID">' + serviceID + '</td>'; // style="visibility:collapse"
       htmlString+='<td class="edit-and-delete-column">'; 
       htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
       htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
@@ -580,25 +621,25 @@ function proceedClick(serviceID,newAccess) {
       switch (serviceID) {
           case "dockage":
               iDckg++;
-              htmlString+='<tr><td width="80%" style="text-align:right" >Dockage Charge Total: ( ' + iDckg + ' )</td>';
+              htmlString+='<tr><td width="80%" style="text-align:right" id="tdDockageCount">Dockage Charge Total: ( ' + iDckg + ' )</td>';
               htmlString+="<td size='1'  style='text-align:right'>Rp. </td>";
-              totalDckg+=unformatNumber(document.getElementById("charge").value);  
-              htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>"; 
+              dckgTotal+=unformatNumber(document.getElementById("charge").value);  
+              htmlString+= "<td style='text-align:right'  id='tdDockageTotal'>" + document.getElementById("charge").value + "</td></tr>"; 
               
               break; 
           case "floating":
               iFloat++;
             
-              htmlString+='<tr><td width="80%" style="text-align:right" >Floating Charge Total: ( ' + iFloat + ' )</td>';
+              htmlString+='<tr><td width="80%" style="text-align:right" id="tdFloatingCount">Floating Charge Total: ( ' + iFloat + ' )</td>';
               totalFloat+=unformatNumber(document.getElementById("charge").value);  
-              htmlString+= "<td style='text-align:right'>" + formatNumber(totalFloat) + "</td></tr>";  
+              htmlString+= "<td style='text-align:right' id='tdFloatingTotal'>" + formatNumber(totalFloat) + "</td></tr>";  
               break;
           case "mooring":
               iMoor++;
             
-              htmlString+='<tr><td width="80%" style="text-align:right" >Mooring Charge Total: ( ' + iMoor + ' )</td>';
+              htmlString+='<tr><td width="80%" style="text-align:right" id="tdMooringCount">Mooring Charge Total: ( ' + iMoor + ' )</td>';
               totalMoor+=unformatNumber(document.getElementById("charge").value);  
-              htmlString+= "<td style='text-align:right'>" + formatNumber(totalMoor) + "</td></tr>";  
+              htmlString+= "<td style='text-align:right' id='tdMooringTotal'>" + formatNumber(totalMoor) + "</td></tr>";  
               break;
      }
      
@@ -609,7 +650,7 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='<tr><td width="80%" style="text-align:right" ><b>Grand Total</b></td>';
       htmlString+="<td size='1'  style='text-align:right'>Rp. </td>";
       grandTotal+=parseFloat(unformatNumber(document.getElementById("charge").value));  
-      htmlString+="<td style='text-align:right'><b>" + document.getElementById("charge").value + "</b></td></tr></table>";
+      htmlString+="<td style='text-align:right' id='tdGrandTotal'><b>" + document.getElementById("charge").value + "</b></td></tr></table>";
       htmlString+='</div>';  //end grand total
       htmlString+='</div>';  //end card-body   
       newServiceItemAccess=false;   
@@ -637,27 +678,36 @@ function proceedClick(serviceID,newAccess) {
       }
       htmlString+="|" + htmlButtonString;
   } else {
-    htmlTotalString+="<div id='" + serviceID + "Total'>";
-     htmlTotalString+="<table width='98%' id='" + serviceID + "Total'>";
+    //  htmlTotalString+="<div id='" + serviceID + "Total'>";
+    //  htmlTotalString+="<table width='98%' id='" + serviceID + "TblTotal'>";
      switch (serviceID) {
         case "dockage":
+            iDckg++;
+            dckgTotal+=unformatNumber(document.getElementById("charge").value);
             if ( newDockageAccess==true) {
               htmlString+='<div class="card-header">';
               htmlString+='<h4 id="title">' + title + '</h4>';
               htmlString+='</div>';
               // htmlString+='<div class="card-body">';
               newDockageAccess=false;
+              htmlTotalString+="<div id='dockageTotal'>";
+              htmlTotalString+='<table width=98% id="dockageTblTotal">';
+              htmlTotalString+='<tr><td width="80%" style="text-align:right" id="tdDockageCount">Dockage Charge Total: ( ' + iDckg + ' )</td>';
+              htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
+              htmlTotalString+= "<td style='text-align:right'  id='tdDockageTotal'>" + formatNumber(dckgTotal) + "</td></tr></table></div>"; //dengan div total baru
+              countServiceItem=iDckg;
+            } else {
+             
+              htmlTotalString+='<table width=98% id="dockageTblTotal">';
+              htmlTotalString+='<tr><td width="80%" style="text-align:right" id="tdDockageCount">Dockage Charge Total: ( ' + iDckg + ' )</td>';
+              htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
+              htmlTotalString+= "<td style='text-align:right'  id='tdDockageTotal'>" + formatNumber(dckgTotal) + "</td></tr></table>";  //tanpa div
+              countServiceItem=iDckg;
             }
-            iDckg++;
-            totalDckg+=unformatNumber(document.getElementById("charge").value);
-            
-            htmlTotalString+='<table width=98% id="dockageTblTotal">';
-            htmlTotalString+='<tr><td width="80%" style="text-align:right" >Dockage Charge Total: ( ' + iDckg + ' )</td>';
-            htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
-            htmlTotalString+= "<td style='text-align:right'>" + formatNumber(totalDckg) + "</td></tr>"; 
-            countServiceItem=iDckg;
             break;
         case "floating":
+            iFloat++;
+            totalFloat+=unformatNumber(document.getElementById("charge").value);
             if ( newFloatingAccess==true ) {
                 if (str.indexOf("FLOATING CHARGE")==-1) {          
                     htmlString+='<div class="card-header">';
@@ -668,17 +718,25 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+='<h4 id="title">' + title + '</h4>';
                 htmlString+='</div>';
                 // htmlString+='<div class="card-body">';
+                htmlTotalString+="<div id='floatingTotal'>"; 
+                htmlTotalString+='<table width=98% id="floatingTblTotal">';
+                htmlTotalString+='<tr><td width="80%" style="text-align:right" >Floating Charge Total: ( ' + iFloat + ' )</td>';
+                htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
+                htmlTotalString+= "<td style='text-align:right'>" + formatNumber(totalFloat) + "</td></tr></table></div>"; 
+                countServiceItem=iFloat;
                 newFloatingAccess=false;
+            } else {
+                htmlTotalString+='<table width=98% id="floatingTblTotal">';
+                htmlTotalString+='<tr><td width="80%" style="text-align:right" >Floating Charge Total: ( ' + iFloat + ' )</td>';
+                htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
+                htmlTotalString+= "<td style='text-align:right'>" + formatNumber(totalFloat) + "</td></tr></table>"; 
+                countServiceItem=iFloat;
             }
-            iFloat++;
-            totalFloat+=unformatNumber(document.getElementById("charge").value);
-            // htmlTotalString+='<table width=98% id="floatingTblTotal">';
-            htmlTotalString+='<tr><td width="80%" style="text-align:right" >Floating Charge Total: ( ' + iFloat + ' )</td>';
-            htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
-            htmlTotalString+= "<td style='text-align:right'>" + formatNumber(totalFloat) + "</td></tr>"; 
-            countServiceItem=iFloat;
+           
             break;
         case "mooring":
+          iMoor++;
+          totalMoor+=unformatNumber(document.getElementById("charge").value);
             if ( newMooringAccess==true) {
                 if (str.indexOf("FLOATING CHARGE")==-1) {  
                     htmlString+='<div class="card-header">';
@@ -688,21 +746,26 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+='<div class="card-header">';
                 htmlString+='<h4 id="title">' + title + '</h4>';
                 htmlString+='</div>';
-                // htmlString+='<div class="card-body">';
-                // console.log("cetak header");
+                htmlString+="<div id='" + serviceID + "Total'>"; 
+                htmlTotalString+='<table width=98% id="mooringTblTotal">';
+                htmlTotalString+='<tr><td width="80%" style="text-align:right" >Mooring Charge Total: ( ' + iMoor + ' )</td>';
+                htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
+                htmlTotalString+= "<td style='text-align:right'>" + formatNumber(totalMoor) + "</td></tr></table></div>"; 
+                countServiceItem=iMoor;
                 newMooringAccess=false;
+            } else {
+                htmlTotalString+='<table width=98% id="mooringTblTotal">';
+                htmlTotalString+='<tr><td width="80%" style="text-align:right" >Mooring Charge Total: ( ' + iMoor + ' )</td>';
+                htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
+                htmlTotalString+= "<td style='text-align:right'>" + formatNumber(totalMoor) + "</td></tr></table>"; 
+                countServiceItem=iMoor;
             }
-            iMoor++;
-            totalMoor+=unformatNumber(document.getElementById("charge").value);
-            // htmlTotalString+='<table width=98% id="mooringTblTotal">';
-            htmlTotalString+='<tr><td width="80%" style="text-align:right" >Mooring Charge Total: ( ' + iMoor + ' )</td>';
-            htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
-            htmlTotalString+= "<td style='text-align:right'>" + formatNumber(totalMoor) + "</td></tr>"; 
-            countServiceItem=iMoor;
+           
+           
             break;
 
      }
-      htmlTotalString+="</table></div>";
+     
       htmlString+='<table  width=98% id="tblServiceItemsData">';
       htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
       htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
@@ -714,24 +777,24 @@ function proceedClick(serviceID,newAccess) {
           htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
       }
   
-      htmlString+='</td><td></td>';
+      htmlString+='</td><td id="tdServiceID">' + serviceID + '</td>'; // style="visibility:collapse"
       htmlString+='<td class="edit-and-delete-column">'; 
       htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
-      htmlString+='<button type="button" class="btn btn-default btn-sm btndel" onclick="SomeDeleteRowFunction(this)"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
-      htmlString+='</div></td></tr></table>';
+      htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
+      htmlString+='</div></td></tr></table>';   //0 --htmlString
      
       htmlString+="|";
-      htmlString+=  htmlTotalString;   
+      htmlString+=  htmlTotalString;     //1 ----htmlTotalString
       htmlString+='</table>';
       htmlString+="|" ;
       grandTotal+=parseFloat(unformatNumber(document.getElementById("charge").value));
-      htmlString+="<div id='grandTotal'>";
+      // htmlString+="<div id='grandTotal'>";
       htmlString+='<table width=98% id="tblGrandTotal">';
       htmlString+='<tr><td width="80%" style="text-align:right" ><b>Grand Total</b></td>';
       htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
-      htmlString+="<td style='text-align:right'><b>" + formatNumber(grandTotal) + "</b></td></tr></table>";
-      htmlString+='</div>';  //end grand total
-      htmlString+= "|" + countServiceItem;
+      htmlString+="<td style='text-align:right' id='tdGrandTotal'><b>" + formatNumber(grandTotal) + "</b></td></tr></table>";
+      // htmlString+='</div>';  //end grand total  -- 2 ---GrandTotal
+      htmlString+= "|" + countServiceItem;   //--3 --- jumlah Service yang tercetak
       // htmlString+= "|" + htmlSpecialTitleString;
   }
  
@@ -828,6 +891,13 @@ function setRate(serviceID) {
 
 function SomeDeleteRowFunction(btndel) {
   if (typeof(btndel) == "object") {
+      var deleteRate=unformatNumber($(btndel).closest('table').find('#charge').text());
+      alert($(btndel).closest('table').find('#charge').text());
+      dckgTotal-=deleteRate;
+      grandTotal-=deleteRate;
+      console.log( dckgTotal );
+      console.log(grandTotal);
+      console.log($(btndel).closest('table').rowIndex);
       $(btndel).closest("table").remove();
   } else {
       return false;

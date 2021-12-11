@@ -28,6 +28,58 @@ document.querySelector(".popup-login .close-btn").addEventListener("click",funct
   }); 
 });
 
+function enableBtn (btn) {
+    switch (btn) {
+        case "add":
+            $("#addBtn").removeClass("disabled");// 
+            $("#addBtn").addClass("actived");// for 2nd li disable 
+            break;
+        case "save":  
+            $("#saveBtn").removeClass("disabled");// 
+            $("#saveBtn").addClass("actived");// for 2nd li disable 
+            break; 
+        case "save":  
+            $("#printBtn").removeClass("disabled");// 
+            $("#printBtn").addClass("actived");// for 2nd li disable 
+            break; 
+        case "all":
+            $("#addBtn").removeClass("disabled");// 
+            $("#addBtn").addClass("actived");// for 2nd li disable 
+            $("#saveBtn").removeClass("disabled");// 
+            $("#saveBtn").addClass("actived");// for 2nd li disable 
+            $("#printBtn").removeClass("disabled");// 
+            $("#printBtn").addClass("actived");// for 2nd li disable 
+            break; 
+    }
+    
+}
+
+function disableBtn (btn) {
+    switch (btn) {
+      case "add":
+          $("#addBtn").removeClass("active");// 
+          $("#addBtn").addClass("disabled");// for 2nd li disable 
+          break;
+      case "save":
+          $("#saveBtn").removeClass("active");// 
+          $("#saveBtn").addClass("disabled");// for 2nd li disable 
+          break;
+      case "print":
+          $("#printBtn").removeClass("active");// 
+          $("#printBtn").addClass("disabled");// for 2nd li disable 
+          break;
+      case "all":
+          $("#addBtn").removeClass("active");// 
+          $("#addBtn").addClass("disabled");// for 2nd li disable 
+          $("#saveBtn").removeClass("active");// 
+          $("#saveBtn").addClass("disabled");// for 2nd li disable 
+          $("#printBtn").removeClass("active");// 
+          $("#printBtn").addClass("disabled");// for 2nd li disable 
+          break;
+      }
+}
+
+
 function loginClick() {
   showLoginForm();
   document.querySelector(".popup-login").classList.add("active");
@@ -55,6 +107,7 @@ function side_menu_click(srvID) {
         disableSideMenu("mooring");
         break;
     }
+    enableBtn("all");
     newServiceAccess=true;
     $.ajax({
       url:'src_data.json',
@@ -424,7 +477,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
               newServiceAccess=false;
               htmlString=proceedClick(serviceID,newAccess);
               document.getElementById("container").innerHTML=htmlString.split("|")[0];
-              document.getElementById("button-panel").innerHTML=htmlString.split("|")[1];;
+              document.getElementById("button-panel").innerHTML=htmlString.split("|")[1];
           } else {
               newAccess=false;
               // document.querySelector("#container .card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
@@ -505,6 +558,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
                     }  else {
                         document.getElementById("dockage-div").innerHTML="";
                         newDockageAccess=true;
+                        newAccess=true;
+                        disableBtn("add");
                         enableSideMenu("all");
                     }
                     
@@ -521,7 +576,10 @@ function showServiceItem(serviceID,srcData,selectedData) {
                     } else {
                         document.getElementById("container").innerHTML="";
                         newDockageAccess=true;
-                        enableSideMenu("all")
+                        // disableBtn("all");
+                        document.getElementById("button-panel").innerHTML="";
+                        enableSideMenu("all");
+
                     }
                     // // console.log( dckgTotal );
                     // console.log(grandTotal);
@@ -565,6 +623,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
                   }  else {
                       document.getElementById("floating-div").innerHTML="";
                       newFloatingAccess=true;
+                      disableBtn("add");
                       enableSideMenu("all");
                   }
                   
@@ -580,7 +639,10 @@ function showServiceItem(serviceID,srcData,selectedData) {
                     
                   } else {
                       document.getElementById("container").innerHTML="";
+                      document.getElementById("button-panel").innerHTML="";
                       newFloatingAccess=true;
+                      newAccess=true;
+
                       enableSideMenu("all")
                   }
                   // // console.log( dckgTotal );
@@ -624,7 +686,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
                       document.getElementById("mooringTbl").deleteRow(rowIndex-1);
                   }  else {
                       document.getElementById("mooring-div").innerHTML="";
-                      newmooringAccess=true;
+                      newMooringAccess=true;
+                      disableBtn("add");
                       enableSideMenu("all");
                   }
                   
@@ -640,7 +703,9 @@ function showServiceItem(serviceID,srcData,selectedData) {
                     
                   } else {
                       document.getElementById("container").innerHTML="";
-                      newmooringAccess=true;
+                      document.getElementById("button-panel").innerHTML="";
+                      newMooringAccess=true;
+                      newAccess=true;
                       enableSideMenu("all")
                   }
                   // // console.log( dckgTotal );
@@ -802,9 +867,10 @@ function proceedClick(serviceID,newAccess) {
       // htmlString+='<div class="card-footer">';
       // htmlString+='<button type="button" id= "dckgDeleteBtn" class="btn btn-warning float-right">Delete</button>';
       htmlButtonString+='<div class="d-grid gap-2 d-md-flex justify-content-md-end">';
-      htmlButtonString+='<button type="button" id= "addBtn" class="btn btn-success  me-md-2 float-right"><span class="glyphicon glyphicon-plus"  aria-hidden="true"> Add </span></button>';
-      htmlButtonString+='<button type="button" id="saveBtn" class="btn btn-info me-md-2 float-right"><span class="glyphicon glyphicon-floppy-saved"  aria-hidden="true"> Save </span></button>';
-      htmlButtonString+='<button type="button" id="savePrintBtn" class="btn btn-info me-md-2 float-right"><span class="glyphicon glyphicon-print"  aria-hidden="true"> Save & Print </span></button>';
+      htmlButtonString+='<button type="button" id= "addBtn" class="btn btn-success  me-md-2 float-right"><span class="glyphicon glyphicon-plus"  aria-disabled="true"> Add </span></button>';
+      htmlButtonString+='<button type="button" id="excelBtn" class="btn btn-primary me-md-2 float-right"> Export to Excel </span></button>';
+      htmlButtonString+='<button type="button" id="saveBtn" class="btn btn-primary me-md-2 float-right"><span class="glyphicon glyphicon-floppy-saved"  aria-disabled="true"> Save </span></button>';
+      htmlButtonString+='<button type="button" id="printBtn" class="btn btn-primary me-md-2 float-right"><span class="glyphicon glyphicon-print"  aria-disabled="true"> Print </span></button>';
      
       // htmlString+='<button type="button" id= "dckgEditBtn" class="btn btn-info float-right" disabled>Edit</button>';
       // htmlString+='</div>';  //end-card-footers

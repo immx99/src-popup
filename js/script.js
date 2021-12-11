@@ -503,7 +503,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
                         document.getElementById("dockageTbl").deleteRow(rowIndex);
                         document.getElementById("dockageTbl").deleteRow(rowIndex-1);
                     }  else {
-                        // document.getElementById("dockage-div").innerHTML="";
+                        document.getElementById("dockage-div").innerHTML="";
+                        enableSideMenu("dockage")
                     }
                     
                     // console.log("Grand Total =" + $(this).closest('.card-body').find("#tdGrandTotal").text());
@@ -517,7 +518,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
                         document.getElementById("tdGrandTotal").innerHTML=formatNumber(grandTotal);
                        
                     } else {
-                        // document.getElementById("container").innerHTML="";
+                        document.getElementById("container").innerHTML="";
+                        enableSideMenu("adockage")
                     }
                     // // console.log( dckgTotal );
                     // console.log(grandTotal);

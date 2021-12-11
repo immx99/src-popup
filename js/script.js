@@ -3,8 +3,8 @@ var iDckg=0;
 var iFloat=0;
 var iMoor=0;
 var dckgTotal=0;
-var totalFloat=0;
-var totalMoor=0;
+var floatTotal=0;
+var moorTotal=0;
 var grandTotal=0;
 var selectedData="Up to 300/Docking & Undocking/warship";
 var title="";
@@ -453,7 +453,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
                       document.getElementById("floatingTotal").innerHTML=str.split("|")[1];
                   }
                   if (serviceID=="mooring") { 
-                      $('#floatingTbl tr:last').after(str.split("|")[0]);
+                      $('#mooringTbl tr:last').after(str.split("|")[0]);
                       document.getElementById("mooringTotal").innerHTML=str.split("|")[1];
                   }
              }
@@ -504,7 +504,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
                         document.getElementById("dockageTbl").deleteRow(rowIndex-1);
                     }  else {
                         document.getElementById("dockage-div").innerHTML="";
-                        enableSideMenu("dockage")
+                        newDockageAccess=true;
+                        enableSideMenu("all");
                     }
                     
                     // console.log("Grand Total =" + $(this).closest('.card-body').find("#tdGrandTotal").text());
@@ -519,7 +520,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
                        
                     } else {
                         document.getElementById("container").innerHTML="";
-                        enableSideMenu("adockage")
+                        newDockageAccess=true;
+                        enableSideMenu("all")
                     }
                     // // console.log( dckgTotal );
                     // console.log(grandTotal);
@@ -529,10 +531,129 @@ function showServiceItem(serviceID,srcData,selectedData) {
                     // newCount=false;
                           
                 }
-                // $(this).closest('tr').remove();
-                // 
-          });
-          
+              
+            });
+
+            $("#floatingTbl").on('click','.btnDelete',function(){
+              console.log(newCount);
+              var rowIndex=$(this).closest('tr').index();
+              // var serviceID=$(this).closest('tr').find('#tdServiceID').text();
+              var deleteRate=parseFloat(unformatNumber($("#floatingTbl").children().children()[rowIndex-1].children[2].innerHTML));
+              if (deleteRate) { 
+                  // var deleteRate=parseFloat(unformatNumber($(this).closest('table').find('#charge').text()));
+                  // var deleteRate= $row.find('td:eq(' + ($(this).closest('td').index() - 1) + ')').text();;
+                  console.log($("#floatingTbl").children().children()[rowIndex-1].children[2].innerHTML);
+                
+                  // $row.find('td:eq(' + ($(this).closest('td').index() + 1) + ')').text();
+                  console.log("Deleted Rate= " + deleteRate);
+                  console.log("floating Total= " + $(this).closest('#floating-div').find("#tdFloatingTotal").text());
+                  dckgTotal=unformatNumber($(this).closest('#floating-div').find("#tdFloatingTotal").text());
+                  // console.log(document.getElementById("tdfloatingTotal").outerHTML);
+                  floatTotal-=deleteRate;
+                
+                  console.log("floatTotal setelah dikurangi=" + floatTotal);
+                  console.log("floating Count= " + $(this).closest('#floating-div').find("#tdFloatingCount").text());
+                  console.log("floating Count= " + $(this).closest('#floating-div').find("#tdFloatingCount").text().split(" ")[4]);
+                  iFloat=parseInt($(this).closest('#floating-div').find("#tdFloatingCount").text().split(" ")[4]) - 1;
+                  // var iDckgx=document.getElementById("tdfloatingCount").outerHTML;
+                  console.log("iFloat=" + iFloat);
+                  if ( iFloat > 0) {
+                      document.getElementById("tdFloatingCount").innerHTML= 'Floating Charge Total: ( ' + iFloat.toString() + ' )';
+                      document.getElementById("tdFloatingTotal").innerHTML=formatNumber(floatTotal);
+                      document.getElementById("floatingTbl").deleteRow(rowIndex);
+                      document.getElementById("floatingTbl").deleteRow(rowIndex-1);
+                  }  else {
+                      document.getElementById("floating-div").innerHTML="";
+                      newFloatingAccess=true;
+                      enableSideMenu("all");
+                  }
+                  
+                  // console.log("Grand Total =" + $(this).closest('.card-body').find("#tdGrandTotal").text());
+                  // console.log("Grand Total =" + document.getElementById("#tdGrandTotal").outerHTML);
+                  console.log("Grand Total =" +  document.querySelector("#container #tdGrandTotal").innerHTML);
+                  // document.querySelector(".popup-service-item .si-close-btn")
+                  // grandTotal=unformatNumber(document.ge("#tdGrandTotal").innerHTML);
+                  grandTotal-=deleteRate;
+                  console.log("Grand Total setelah dikurangi =" + grandTotal);
+                  if (grandTotal>0 ) {
+                      document.getElementById("tdGrandTotal").innerHTML=formatNumber(grandTotal);
+                    
+                  } else {
+                      document.getElementById("container").innerHTML="";
+                      newFloatingAccess=true;
+                      enableSideMenu("all")
+                  }
+                  // // console.log( dckgTotal );
+                  // console.log(grandTotal);
+                  
+
+                
+                  // newCount=false;
+                        
+              }
+            
+             });
+        
+            $("#mooringTbl").on('click','.btnDelete',function(){
+              console.log(newCount);
+              var rowIndex=$(this).closest('tr').index();
+              // var serviceID=$(this).closest('tr').find('#tdServiceID').text();
+              var deleteRate=parseFloat(unformatNumber($("#mooringTbl").children().children()[rowIndex-1].children[2].innerHTML));
+              if (deleteRate) { 
+                  // var deleteRate=parseFloat(unformatNumber($(this).closest('table').find('#charge').text()));
+                  // var deleteRate= $row.find('td:eq(' + ($(this).closest('td').index() - 1) + ')').text();;
+                  console.log($("#mooringTbl").children().children()[rowIndex-1].children[2].innerHTML);
+                
+                  // $row.find('td:eq(' + ($(this).closest('td').index() + 1) + ')').text();
+                  console.log("Deleted Rate= " + deleteRate);
+                  console.log("mooring Total= " + $(this).closest('#mooring-div').find("#tdMooringTotal").text());
+                  dckgTotal=unformatNumber($(this).closest('#mooring-div').find("#tdMooringTotal").text());
+                  // console.log(document.getElementById("tdMooringTotal").outerHTML);
+                  moorTotal-=deleteRate;
+                
+                  console.log("floatTotal setelah dikurangi=" + moorTotal);
+                  console.log("mooring Count= " + $(this).closest('#mooring-div').find("#tdMooringCount").text());
+                  console.log("mooring Count= " + $(this).closest('#mooring-div').find("#tdMooringCount").text().split(" ")[4]);
+                  iMoor=parseInt($(this).closest('#mooring-div').find("#tdMooringCount").text().split(" ")[4]) - 1;
+                  // var iDckgx=document.getElementById("tdMooringCount").outerHTML;
+                  console.log("iMoor=" + iMoor);
+                  if ( iMoor > 0) {
+                      document.getElementById("tdMooringCount").innerHTML= 'mooring Charge Total: ( ' + iMoor.toString() + ' )';
+                      document.getElementById("tdMooringTotal").innerHTML=formatNumber(moorTotal);
+                      document.getElementById("mooringTbl").deleteRow(rowIndex);
+                      document.getElementById("mooringTbl").deleteRow(rowIndex-1);
+                  }  else {
+                      document.getElementById("mooring-div").innerHTML="";
+                      newmooringAccess=true;
+                      enableSideMenu("all");
+                  }
+                  
+                  // console.log("Grand Total =" + $(this).closest('.card-body').find("#tdGrandTotal").text());
+                  // console.log("Grand Total =" + document.getElementById("#tdGrandTotal").outerHTML);
+                  console.log("Grand Total =" +  document.querySelector("#container #tdGrandTotal").innerHTML);
+                  // document.querySelector(".popup-service-item .si-close-btn")
+                  // grandTotal=unformatNumber(document.ge("#tdGrandTotal").innerHTML);
+                  grandTotal-=deleteRate;
+                  console.log("Grand Total setelah dikurangi =" + grandTotal);
+                  if (grandTotal>0 ) {
+                      document.getElementById("tdGrandTotal").innerHTML=formatNumber(grandTotal);
+                    
+                  } else {
+                      document.getElementById("container").innerHTML="";
+                      newmooringAccess=true;
+                      enableSideMenu("all")
+                  }
+                  // // console.log( dckgTotal );
+                  // console.log(grandTotal);
+                  
+
+                
+                  // newCount=false;
+                        
+              }
+            
+        });
+      
       });
            
     });
@@ -636,7 +757,7 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
       htmlString+='</div></td></tr></table>';
       htmlString+="<div id='" + serviceID + "Total'>";
-      htmlString+='<table width=98% id=' + serviceID + 'TblTotal">';
+      htmlString+='<table width=98% id="' + serviceID + 'TblTotal">';
      
       // console.log(serviceID);
       switch (serviceID) {
@@ -650,17 +771,15 @@ function proceedClick(serviceID,newAccess) {
               break; 
           case "floating":
               iFloat++;
-            
               htmlString+='<tr><td width="80%" style="text-align:right" id="tdFloatingCount">Floating Charge Total: ( ' + iFloat + ' )</td>';
-              totalFloat+=unformatNumber(document.getElementById("charge").value);  
-              htmlString+= "<td style='text-align:right' id='tdFloatingTotal'>" + formatNumber(totalFloat) + "</td></tr>";  
+              floatTotal+=unformatNumber(document.getElementById("charge").value);  
+              htmlString+= "<td style='text-align:right' id='tdFloatingTotal'>" + formatNumber(floatTotal) + "</td></tr>";  
               break;
           case "mooring":
               iMoor++;
-            
               htmlString+='<tr><td width="80%" style="text-align:right" id="tdMooringCount">Mooring Charge Total: ( ' + iMoor + ' )</td>';
-              totalMoor+=unformatNumber(document.getElementById("charge").value);  
-              htmlString+= "<td style='text-align:right' id='tdMooringTotal'>" + formatNumber(totalMoor) + "</td></tr>";  
+              moorTotal+=unformatNumber(document.getElementById("charge").value);  
+              htmlString+= "<td style='text-align:right' id='tdMooringTotal'>" + formatNumber(moorTotal) + "</td></tr>";  
               break;
      }
      
@@ -769,7 +888,7 @@ function proceedClick(serviceID,newAccess) {
             break;
         case "floating":
             iFloat++;
-            totalFloat+=unformatNumber(document.getElementById("charge").value);
+            floatTotal+=unformatNumber(document.getElementById("charge").value);
             if ( newFloatingAccess==true ) {
                 htmlString+='<div id="floating-div">'
                 htmlString+='<div class="card">';  //begin floating card child
@@ -802,9 +921,9 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+='</table>';
                 htmlString+="<div id='floatingTotal'>"; 
                 htmlString+='<table width=98% id="floatingTblTotal">';
-                htmlString+='<tr><td width="80%" style="text-align:right" >Floating Charge Total: ( ' + iFloat + ' )</td>';
+                htmlString+='<tr><td width="80%" style="text-align:right" id="tdFloatingCount">Floating Charge Total: ( ' + iFloat + ' )</td>';
                 htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
-                htmlString+= "<td style='text-align:right'>" + formatNumber(totalFloat) + "</td></tr></table></div>"; 
+                htmlString+= "<td style='text-align:right' id='tdFloatingTotal'>" + formatNumber(floatTotal) + "</td></tr></table></div>"; 
                 htmlString+='</div></div></div>'; //end card-body, end card dan end floating-div
                 countServiceItem=iFloat;
                 newFloatingAccess=false;
@@ -826,18 +945,18 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
                 htmlString+='</div></td></tr>';   //0 --htmlString
                   htmlTotalString+='<table width=98% id="floatingTblTotal">';
-                  htmlTotalString+='<tr><td width="80%" style="text-align:right" >Floating Charge Total: ( ' + iFloat + ' )</td>';
+                  htmlTotalString+='<tr><td width="80%" style="text-align:right" id="tdFloatingCount">Floating Charge Total: ( ' + iFloat + ' )</td>';
                   htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
-                  htmlTotalString+= "<td style='text-align:right'>" + formatNumber(totalFloat) + "</td></tr></table>"; 
+                  htmlTotalString+= "<td style='text-align:right' id='tdFloatingTotal'>" + formatNumber(floatTotal) + "</td></tr></table>"; 
                   countServiceItem=iFloat;
             }
            
             break;
         case "mooring":
           iMoor++;
-          totalMoor+=unformatNumber(document.getElementById("charge").value);
+          moorTotal+=unformatNumber(document.getElementById("charge").value);
             if ( newMooringAccess==true) {
-                htmlString+='<div id="floating-div">'
+                htmlString+='<div id="mooring-div">'
                 htmlString+='<div class="card">';  //begin floating card child
                 if (str.indexOf("FLOATING CHARGE")==-1) {  
                     htmlString+='<div class="card-header">';
@@ -869,9 +988,9 @@ function proceedClick(serviceID,newAccess) {
                
                 htmlString+="<div id='" + serviceID + "Total'>"; 
                 htmlString+='<table width=98% id="mooringTblTotal">';
-                htmlString+='<tr><td width="80%" style="text-align:right" >Mooring Charge Total: ( ' + iMoor + ' )</td>';
+                htmlString+='<tr><td width="80%" style="text-align:right" id="tdMooringCount">Mooring Charge Total: ( ' + iMoor + ' )</td>';
                 htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
-                htmlString+= "<td style='text-align:right'>" + formatNumber(totalMoor) + "</td></tr></table></div>"; 
+                htmlString+= "<td style='text-align:right' id='tdMooringTotal'>" + formatNumber(moorTotal) + "</td></tr></table></div>"; 
                 htmlString+='</div></div></div>'; //end card-body, end card dan end floating-div
                 countServiceItem=iMoor;
                 newMooringAccess=false;
@@ -893,9 +1012,9 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
                 htmlString+='</div></td></tr>';   //0 --htmlString
                 htmlTotalString+='<table width=98% id="mooringTblTotal">';
-                htmlTotalString+='<tr><td width="80%" style="text-align:right" >Mooring Charge Total: ( ' + iMoor + ' )</td>';
+                htmlTotalString+='<tr><td width="80%" style="text-align:right" id="tdMooringCount" >Mooring Charge Total: ( ' + iMoor + ' )</td>';
                 htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
-                htmlTotalString+= "<td style='text-align:right'>" + formatNumber(totalMoor) + "</td></tr></table>"; 
+                htmlTotalString+= "<td style='text-align:right' id='tdMooringTotal'>" + formatNumber(moorTotal) + "</td></tr></table>"; 
                 countServiceItem=iMoor;
             }
            

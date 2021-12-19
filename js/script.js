@@ -2,17 +2,20 @@
 var iDckg=0;
 var iFloat=0;
 var iMoor=0;
+var iDbr=0;   //Dock Block Removal
 var dckgTotal=0;
 var floatTotal=0;
 var moorTotal=0;
+var dbrTotal=0;
 var grandTotal=0;
-var selectedData="Up to 300/Docking & Undocking/warship";
+// var selectedData="Up to 300/Docking & Undocking/warship";
 var title="";
 var serviceID="dockage";
 var newDockageAccess=true;
 var newFloatingAccess=true;
 var newMooringAccess=true;
 var newServiceAccess=true;
+var newDbrAccess=true;
 var newCount=true;
 document.querySelector(".popup-service-item .si-close-btn").addEventListener("click",function() {
   document.querySelector(".popup-service-item").classList.remove("active");
@@ -105,6 +108,10 @@ function side_menu_click(srvID) {
       case "mooring":
         serviceID="mooring";
         disableSideMenu("mooring");
+        break;
+      case "dbr":
+        serviceID="dbr";
+        disableSideMenu("dbr");
         break;
     }
     enableBtn("all");
@@ -291,9 +298,17 @@ function showServiceItem(serviceID,srcData,selectedData) {
   let typeOfVessel;
   // let serviceItem;
   // console.log(srcData);
-  grossTon=selectedData.split("/")[0];
-  serviceItem=selectedData.split("/")[1];
-  typeOfVessel=selectedData.split("/")[2];
+  var str=document.getElementById("container").outerHTML;
+  // console.log("String=" + str);
+  if (str.indexOf("Gross Ton")==-1) {
+      grossTon=selectedData.split("/")[0];
+      serviceItem=selectedData.split("/")[1];
+      typeOfVessel=selectedData.split("/")[2];
+  } else {
+     grossTon=document.getElementById("grossTon").innerHTML;
+     typeOfVessel=document.getElementById("typeOfVessel").innerHTML;
+  }
+  //  
   var j=0
   var htmlGrossTonString="";
   var htmlServiceDataString="";
@@ -335,8 +350,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
         break;
     case "floating":
         title="For time spending shipyard areas, floating days to be charged (Excluded Port Authority wharfage charges)";
-        var str=document.getElementById("container").outerHTML
-        if (str.indexOf("FLOATING CHARGE")==-1) {
+        
+        if (str.indexOf("FLOATING CHARGE") == -1) {
             titleA="FLOATING CHARGE IN SHIPYARD AREA";
             title="a. " + title;
         } else {
@@ -345,7 +360,12 @@ function showServiceItem(serviceID,srcData,selectedData) {
         if (grossTon=="Up to 300" || grossTon=="301 - 500") {
             grossTon="Up to 500";
         }
-        htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'floating\');">';
+        // alert("Gross Ton: " + str.indexOf("Gross Ton"));
+        if (str.indexOf("Gross Ton") == -1) {
+            htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'floating\');">';
+        } else {
+            htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'floating\');" disabled>';
+        }
         for(i=0; i < srcData.FloatingData.length; i++) {
           if (srcData.FloatingData[i].grossTon==grossTon){      
               htmlGrossTonString += "<option  value='" + srcData.FloatingData[i].grossTon  + "' selected>" + 
@@ -377,7 +397,12 @@ function showServiceItem(serviceID,srcData,selectedData) {
         htmlGrossTonString+=htmlStr.split("|")[0];
         htmlRateString+=htmlStr.split("|")[1];
         htmlServiceDataString+=htmlStr.split("|")[2];
-
+        break;
+      case "dbr":
+        var htmlStr=dbr(grossTon,srcData,serviceItem);
+        htmlGrossTonString+=htmlStr.split("|")[0];
+        htmlRateString+=htmlStr.split("|")[1];
+        htmlServiceDataString+=htmlStr.split("|")[2];
         break;
 }
   // htmlString+='<div class="card">';
@@ -389,18 +414,59 @@ function showServiceItem(serviceID,srcData,selectedData) {
   htmlString+='</div>';
   htmlString+='<div class="card-body">';
   htmlString+= htmlGrossTonString;
-
+ 
   htmlString+='<tr><td colspan="2"><label for="typeOfVessel">Type of Vessel</label> </td>';
-  htmlString+='<td><select name="typeOfVessel" id="typeOfVessel">';
-  htmlString+= '<option value="warship">warship</option>';
-  htmlString+= '<option value="ferry roro">ferry roro</option>';
-  htmlString+= '<option value="workship">workship</option>';
-  htmlString+= '<option value="tugboat">tugboat</option>';
-  htmlString+= '<option value="dredger">dredger</option>';
-  htmlString+= '<option value="yacht">yacht</option>';
-  htmlString+= '<option value="barge">barge</option>';
-  htmlString+= '<option value="catamaran">catamaran</option>';
-  htmlString+='<option value="double skin/hull">double skin/hull</option></select>' + "</td></tr>"; 
+  if (str.indexOf("Gross Ton") != -1) {
+      htmlString+='<td><select name="typeOfVessel" id="typeOfVessel" disabled>';
+  } else {
+      htmlString+='<td><select name="typeOfVessel" id="typeOfVessel">';
+  }
+  if (typeOfVessel=="warship") {
+      htmlString+= '<option value="warship" selected>warship</option>';
+  } else {
+      htmlString+= '<option value="warship">warship</option>';
+  }
+  if (typeOfVessel=="ferry roro") {
+     htmlString+= '<option value="ferry roro" selected>ferry roro</option>';
+  } else {
+      htmlString+= '<option value="ferry roro">ferry roro</option>';
+  }
+  if (typeOfVessel=="workship") {
+      htmlString+= '<option value="workship" selected>workship</option>';
+  } else {
+      htmlString+= '<option value="workship">workship</option>';
+  }
+  if (typeOfVessel=="tugboat") {
+      htmlString+= '<option value="tugboat" selected>tugboat</option>';
+  } else {
+      htmlString+= '<option value="tugboat">tugboat</option>';
+  }
+  if (typeOfVessel=="dredger") {
+      htmlString+= '<option value="dredger" selected>dredger</option>';
+  } else {
+      htmlString+= '<option value="dredger">dredger</option>';
+  }
+  if (typeOfVessel=="yacht") {
+      htmlString+= '<option value="yacht" selected>yacht</option>';
+  } else {
+      htmlString+= '<option value="yacht">yacht</option>';
+  }
+  if (typeOfVessel=="barge") {
+      htmlString+= '<option value="barge" selected>barge</option>';
+  } else {
+      htmlString+= '<option value="barge">barge</option>';
+  }
+  if (typeOfVessel=="catamaran") {
+      htmlString+= '<option value="catamaran" selected>catamaran</option>';
+  } else {
+     htmlString+= '<option value="catamaran">catamaran</option>';
+  }
+  if (typeOfVessel=="double skin/hull") {
+      htmlString+='<option value="double skin/hull" selected>double skin/hull</option></select>' + "</td></tr>"; 
+  } else {
+      htmlString+='<option value="double skin/hull">double skin/hull</option></select>' + "</td></tr>"; 
+  }
+ 
   htmlString+=htmlServiceDataString;
   // htmlString+='<tr><td><label for="dckgDocking">Docking & Undocking</label></td>'
   // htmlString+='<tr><td><select name="serviceItem" id="serviceItem" onchange="return setRate();">';
@@ -509,6 +575,10 @@ function showServiceItem(serviceID,srcData,selectedData) {
                       $('#mooringTbl tr:last').after(str.split("|")[0]);
                       document.getElementById("mooringTotal").innerHTML=str.split("|")[1];
                   }
+                  if (serviceID=="dbr") { 
+                    $('#dbrTbl tr:last').after(str.split("|")[0]);
+                    document.getElementById("dbrTotal").innerHTML=str.split("|")[1];
+                }
              }
               
               document.getElementById("grandTotal").innerHTML= str.split("|")[2]; 
@@ -727,6 +797,45 @@ function showServiceItem(serviceID,srcData,selectedData) {
   // console.log(htmlString);
   return 0;
 }
+function dbr(grossTon,srcData,serviceItem) {
+    var j=0
+    var htmlGrossTonString="";
+    var htmlServiceDataString="";
+    var htmlRateString=""; 
+    var str=document.getElementById("container").innerHTML;
+    title="DOCK BLOCK REMOVAL";
+    if (str.indexOf("Gross Ton") != -1) {
+        htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'dbr\');" disabled>';
+    } else {
+        htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'dbr\');">';
+    }
+    for(i=0; i < srcData.DockageData.length; i++) {
+      if (srcData.DockageData[i].grossTon==grossTon){      
+          htmlGrossTonString += "<option  value='" + srcData.DockageData[i].grossTon  + "' selected>" + 
+          srcData.DockageData[i].grossTon + " </option>";
+      } else {
+          htmlGrossTonString  += "<option  value='" + srcData.DockageData[i].grossTon  + "'>" + 
+          srcData.DockageData[i].grossTon + " </option>";
+      }
+    }
+    htmlGrossTonString+="</select></td></tr>";
+   
+   htmlRateString+="<td><input type='text' id='rate' name='rate' value='" + 
+   formatNumber(srcData.dock_block_removal[j].rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";  //umpan pertama
+    htmlServiceDataString+='<tr><td><select name="serviceItem" id="serviceItem" onchange="return setRate(\'dbr\');">';
+    // console.log(htmlServiceDataString);
+    for (let i=0; i<srcData.dock_block_removal.length;i++) {
+        if (serviceItem==srcData.dock_block_removal[i].service_item) {
+            htmlServiceDataString+= '<option value="' + srcData.dock_block_removal[i].service_item + '" selected>' + srcData.dock_block_removal[i].service_item + '</option>';
+        } else {
+            htmlServiceDataString+= '<option value="' + srcData.dock_block_removal[i].service_item + '">' + srcData.dock_block_removal[i].service_item + '</option>';
+        }
+      
+    }
+    htmlServiceDataString+="</select></td>";
+    return htmlGrossTonString + "|" + htmlRateString + "|" + htmlServiceDataString;
+}
+
 
 function mooring(grossTon,srcData,serviceItem) {
     var j=0
@@ -734,7 +843,7 @@ function mooring(grossTon,srcData,serviceItem) {
     var htmlServiceDataString="";
     var htmlRateString=""; 
     title="For Mooring and Unmooring Operation";
-    var str=document.getElementById("container").outerHTML
+    var str=document.getElementById("container").innerHTML;
     if (str.indexOf("FLOATING CHARGE")==-1) {
         titleA="FLOATING CHARGE IN SHIPYARD AREA";
         title="a. " + title;
@@ -744,7 +853,12 @@ function mooring(grossTon,srcData,serviceItem) {
     if (grossTon=="Up to 300" || grossTon=="301 - 500") {
         grossTon="Up to 500";
     }
-    htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'mooring\');">';
+    if (str.indexOf("Gross Ton") != -1) {
+        htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'mooring\');" disabled>';
+    } else {
+        htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'mooring\');">';
+    }
+    
     for(i=0; i < srcData.FloatingData.length; i++) {
       if (srcData.FloatingData[i].grossTon==grossTon){      
           htmlGrossTonString += "<option  value='" + srcData.FloatingData[i].grossTon  + "' selected>" + 
@@ -780,16 +894,16 @@ function proceedClick(serviceID,newAccess) {
   let htmlGrandTotalString="";
   let htmlSpecialTitleString="";
   let countServiceItem=0;
-  var str=document.getElementById("container").outerHTML;
+  var str=document.getElementById("container").innerHTML;
   if (newAccess==true) {
      
       htmlString+='<div class="card">'; //card parent
       htmlString+='<div class="card-body">'; //card body parent
       htmlString+='<table  width=50% id="tblStaticData">';
       htmlString+="<tr><td>Gross Ton or Displacement</td><td size='1'>:</td>"; 
-      htmlString+='<td width="50%" style="text-align:left;">' + document.getElementById("grossTonSelect").value + "</td></tr>";
+      htmlString+='<td id="grossTon" width="50%" style="text-align:left;">' + document.getElementById("grossTonSelect").value + "</td></tr>";
       htmlString+="<tr><td>Type of Vessel</td><td size='1'>:</td>";
-      htmlString+='<td width="50%" style="text-align:left;">' + document.getElementById("typeOfVessel").value + "</td></tr>";
+      htmlString+='<td id="typeOfVessel" width="50%" style="text-align:left;">' + document.getElementById("typeOfVessel").value + "</td></tr>";
       htmlString+='</div>';  //end card-body parent
      
       htmlString+='</table>';
@@ -811,6 +925,7 @@ function proceedClick(serviceID,newAccess) {
       htmlString+= "<td style='text-align:right' id='charge'>" + document.getElementById("charge").value + "</td></tr>";  
       htmlString+='<tr><td width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
       htmlString+= document.getElementById("rate").value;
+    
       if (document.getElementById("workingTime").style.visibility=="visible") {
           htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
           htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
@@ -846,6 +961,12 @@ function proceedClick(serviceID,newAccess) {
               moorTotal+=unformatNumber(document.getElementById("charge").value);  
               htmlString+= "<td style='text-align:right' id='tdMooringTotal'>" + formatNumber(moorTotal) + "</td></tr>";  
               break;
+          case "dbr":
+              iDbr++;
+              htmlString+='<tr><td width="80%" style="text-align:right" id="tdDbrCount">Dock Block Removal Charge Total: ( ' + iDbr + ' )</td>';
+              dbrTotal+=unformatNumber(document.getElementById("charge").value);  
+              htmlString+= "<td style='text-align:right' id='tdDbrTotal'>" + formatNumber(moorTotal) + "</td></tr>";  
+              break;
      }
      
       htmlString+='</table>';  //end table service Total
@@ -857,7 +978,7 @@ function proceedClick(serviceID,newAccess) {
       htmlString+="<div id='grandTotal'>";
       htmlString+='<table width=98% id="tblGrandTotal">';
       htmlString+='<tr><td width="80%" style="text-align:right" ><b>Grand Total</b></td>';
-      htmlString+="<td size='1'  style='text-align:right'>Rp. </td>";
+      htmlString+="<td size='1'  style='text-align:right'><b>Rp. </b></td>";
       grandTotal+=parseFloat(unformatNumber(document.getElementById("charge").value));  
       htmlString+="<td style='text-align:right' id='tdGrandTotal'><b>" + document.getElementById("charge").value + "</b></td></tr></table>";
       htmlString+='</div></div>';  //end grand total and end card-body perent
@@ -907,6 +1028,7 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
                 htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
                 htmlString+= document.getElementById("rate").value;
+                
                 if (document.getElementById("workingTime").style.visibility=="visible") {
                     htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
                     htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
@@ -973,6 +1095,14 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
                 htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
                 htmlString+= document.getElementById("rate").value;
+               
+                if (str.length>0) {
+                   
+                    if (document.getElementById("grossTonSelect").value=="Up to 500" && 
+                      document.getElementById("grossTon").innerHTML=="Up to 300") {
+                        htmlString+=" Gross Ton: Up to 500 ";
+                    }
+                }
                 if (document.getElementById("workingTime").style.visibility=="visible") {
                     htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
                     htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
@@ -999,6 +1129,14 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
                 htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
                 htmlString+= document.getElementById("rate").value;
+                
+                if (str.length>0) {
+                   
+                    if (document.getElementById("grossTonSelect").value=="Up to 500" && 
+                      document.getElementById("grossTon").innerHTML=="Up to 300") {
+                        htmlString+=" Gross Ton: Up to 500 ";
+                    }
+                }
                 if (document.getElementById("workingTime").style.visibility=="visible") {
                     htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
                     htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
@@ -1019,8 +1157,8 @@ function proceedClick(serviceID,newAccess) {
            
             break;
         case "mooring":
-          iMoor++;
-          moorTotal+=unformatNumber(document.getElementById("charge").value);
+            iMoor++;
+            moorTotal+=unformatNumber(document.getElementById("charge").value);
             if ( newMooringAccess==true) {
                 htmlString+='<div id="mooring-div">'
                 htmlString+='<div class="card">';  //begin floating card child
@@ -1039,6 +1177,12 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
                 htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
                 htmlString+= document.getElementById("rate").value;
+                if (str.length>0) {
+                  if (document.getElementById("grossTonSelect").value=="Up to 500" && 
+                    document.getElementById("grossTon").innerHTML=="Up to 300") {
+                      htmlString+=" Gross Ton: Up to 500 ";
+                  }
+                }
                 if (document.getElementById("workingTime").style.visibility=="visible") {
                     htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
                     htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
@@ -1066,6 +1210,12 @@ function proceedClick(serviceID,newAccess) {
                 htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
                 htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
                 htmlString+= document.getElementById("rate").value;
+                if (str.length>0) {
+                  if (document.getElementById("grossTonSelect").value=="Up to 500" && 
+                     document.getElementById("grossTon").innerHTML=="Up to 300") {
+                      htmlString+=" Gross Ton: Up to 500 ";
+                  }
+                }
                 if (document.getElementById("workingTime").style.visibility=="visible") {
                     htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
                     htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
@@ -1083,8 +1233,68 @@ function proceedClick(serviceID,newAccess) {
                 htmlTotalString+= "<td style='text-align:right' id='tdMooringTotal'>" + formatNumber(moorTotal) + "</td></tr></table>"; 
                 countServiceItem=iMoor;
             }
-           
-           
+            break;
+        case "dbr":
+            iDbr++;
+            dbrTotal+=unformatNumber(document.getElementById("charge").value);
+            if ( newDbrAccess==true) {
+                htmlString+='<div id="dbr-div">'
+                htmlString+='<div class="card">';  //begin floating card child
+              
+                htmlString+='<div class="card-header">';
+                htmlString+='<h4 id="title">DOCK BLOCK REMOVAL</h4>';
+                htmlString+='</div>';
+              
+                htmlString+='<div class="card-body">'; //begin dbr card-body child
+                htmlString+='<table  width=98% id="dbrTbl">';
+                htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
+                htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
+                htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
+                htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+                htmlString+= document.getElementById("rate").value;
+                if (document.getElementById("workingTime").style.visibility=="visible") {
+                  htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
+                  htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
+                }
+                htmlString+='</td><td></td>';
+                htmlString+='<td class="edit-and-delete-column">'; 
+                htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
+                htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
+                htmlString+='</div></td></tr>';   //0 --htmlString
+                htmlString+='</table>';
+                
+                htmlString+="<div id='" + serviceID + "Total'>"; 
+                htmlString+='<table width=98% id="dbrTblTotal">';
+                htmlString+='<tr><td width="80%" style="text-align:right" id="tdDbrCount">Dock Block Removal Charge Total: ( ' + iDbr + ' )</td>';
+                htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
+                htmlString+= "<td style='text-align:right' id='tdDbrTotal'>" + formatNumber(dbrTotal) + "</td></tr></table></div>"; 
+                htmlString+='</div></div></div>'; //end card-body, end card dan end floating-div
+                countServiceItem=iDbr;
+                newDbrAccess=false;
+            } else {
+                htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
+                htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
+                htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
+                htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+                htmlString+= document.getElementById("rate").value;
+                
+                if (document.getElementById("workingTime").style.visibility=="visible") {
+                    htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
+                    htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
+                }
+            
+                // htmlString+='</td><td id="tdServiceID">' + serviceID + '</td>'; // style="visibility:collapse"
+                htmlString+='</td><td></td>';
+                htmlString+='<td class="edit-and-delete-column">'; 
+                htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
+                htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
+                htmlString+='</div></td></tr>';   //0 --htmlString
+                htmlTotalString+='<table width=98% id="dbrTblTotal">';
+                htmlTotalString+='<tr><td width="80%" style="text-align:right" id="tdDbrCount" >Dock Block Removal Charge Total: ( ' + iDbr + ' )</td>';
+                htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
+                htmlTotalString+= "<td style='text-align:right' id='tdDbrTotal'>" + formatNumber(dbrTotal) + "</td></tr></table>"; 
+                countServiceItem=iDbr;
+            }
             break;
 
      }
@@ -1100,7 +1310,7 @@ function proceedClick(serviceID,newAccess) {
       // htmlString+="<div id='grandTotal'>";
       htmlString+='<table width=98% id="tblGrandTotal">';
       htmlString+='<tr><td width="80%" style="text-align:right" ><b>Grand Total</b></td>';
-      htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
+      htmlString+="<td size='1'  style='text-align:right'><b>Rp. </b></td>"
       htmlString+="<td style='text-align:right' id='tdGrandTotal'><b>" + formatNumber(grandTotal) + "</b></td></tr></table>";
       // htmlString+='</div>';  //end grand total  -- 2 ---GrandTotal e
 
@@ -1172,7 +1382,7 @@ function setRate(serviceID) {
               }
               break;
           case "mooring":
-            console.log(grossTonIdx);
+            // console.log(grossTonIdx);
               switch (serviceItemIdx) {
                   case 0:
                       document.getElementById("rate").value=formatNumber(data.FloatingData[grossTonIdx].mooring_rate);
@@ -1189,7 +1399,13 @@ function setRate(serviceID) {
                       document.getElementById("rate").removeAttribute("readonly");
                       document.getElementById("rate").style.backgroundColor="yellow";
               }
-              break;              
+              break; 
+          case "dbr":
+              document.getElementById("rate").value=formatNumber(data.dock_block_removal[serviceItemIdx].rate);
+              document.getElementById("rate").setAttribute('readonly', true);
+              document.getElementById("rate").style.backgroundColor="white";
+              break;
+
       }
      
       calculate();

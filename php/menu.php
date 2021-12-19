@@ -6,7 +6,11 @@
 	</style>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
    
+   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
  <script>
+
     // propID=document.getElementById("counter").value;
 
     // window.onload = function(){
@@ -16,34 +20,56 @@
     // propNbr = document.getElementById("storage").getAttribute("counter");
     // propID="0".repeat(7-propID.length) + propID;
     // console.log("propID="+propID);
-
+    var selectedData="Up to 300/Docking & Undocking/warship";
  </script>
 
 
  <!-- partial:index.partial.html -->
  
-    <div>
-      <nav class="menu">
-      <ol>
-        <li class="menu-item">
-          <a href="#0">Proposal</a>
-          <ol class="sub-menu">
-            <li class="menu-item active" id="liCreateNew" ><a href="index.php?newfile=yes&renewal=no&open=no">Create New</a></li> 
-            <li class="menu-item active" id="liRenewal"><a  href="index.php?newfile=yes&renewal=yes&open=no">Renewal</a></li>
-            <li class="menu-item active" id="liOpenProp"><a href="javascript:void(0)" onclick="openClick()">Open</a></li>
-            <li class="menu-item"><a href="#0">Close</a></li>
-            <li class="menu-item"><a href="index.php">Logout</a></li>
-          </ol>
-        </li>
-        <li class="menu-item"><a href="index.html">Home</a></li>
-        <li class="menu-item"><a href="#0">Report</a></li>
-        <li class="menu-item"><a href="#0">Admin</a></li>
-        <li class="menu-item"><a href="#0">Contact</a></li>
-        <li class="menu-item"><a href="#0">About</a></li>
-        <li class="menu-item"><a href="javascript:void(0)" onclick="loginClick()">Login</a></li>
-      </ol>
-      </nav>
+
+<div class="menu-div">
+    <div class="corner">
+        <table width=90% height=100%>
+            <tr><td width=25%><div style="border:5px; solid black; border-radius: 20px;">
+                <img src="assets/icons/icons8-computer-64.png" width="60" height="60"></div></td>
+                <td width=65%>  
+                    <!-- Actual search box -->
+                    <!-- <div class="main"> -->
+                    <div class="input-group">
+    <input type="text" class="form-control" placeholder="Search or jump ..">
+    <div class="input-group-append">
+      <button class="btn btn-secondary" type="button">
+        <i class="fa fa-search"></i>
+      </button>
     </div>
+  </div>
+                    <!-- </div> -->
+              </td>
+            </tr>
+        </table>
+    </div>
+
+    <nav class="menu">
+      <ol>
+          <li class="menu-item">
+            <a href="#0">Proposal</a>
+            <ol class="sub-menu">
+              <li class="menu-item active" id="liCreateNew" ><a href="index.php?newfile=yes&renewal=no&open=no">Create New</a></li> 
+              <li class="menu-item active" id="liRenewal"><a  href="index.php?newfile=yes&renewal=yes&open=no">Renewal</a></li>
+              <li class="menu-item active" id="liOpenProp"><a href="javascript:void(0)" onclick="openClick()">Open</a></li>
+              <li class="menu-item"><a href="#0">Close</a></li>
+              <li class="menu-item"><a href="index.php">Logout</a></li>
+            </ol>
+          </li>
+          <li class="menu-item"><a href="index.html">Home</a></li>
+          <li class="menu-item"><a href="#0">Report</a></li>
+          <li class="menu-item"><a href="#0">Admin</a></li>
+          <li class="menu-item"><a href="#0">Contact</a></li>
+          <li class="menu-item"><a href="#0">About</a></li>
+          <li class="menu-item"><a href="javascript:void(0)" onclick="loginClick()">Login</a></li>
+      </ol>
+    </nav>
+</div>
 
     <div class="side-menu">
       <div id="side-menu-title">
@@ -64,7 +90,8 @@
                     href='javascript:void(0);' onclick='side_menu_click("mooring")'>b. For Mooring and Unmooring Operation</a> </li>
               </ul>
               </li>
-              <li><a href="#link2">3. Dock Block Removal</a> </li>
+              <li  class='active' id='liDbr'> <a id='side-menu-dbr' class='nav-link dbr'
+                    href='javascript:void(0);' onclick='side_menu_click("dbr")'>3. Dock Block Removal</a> </li>
               <li><a href="#">4. Tug Boat and Cranes Hire</a> 
                 <ul>
                   <li> <a href="#link5">a. Boat and Floating Crane</a> </li>
@@ -234,59 +261,75 @@
     function disableSideMenu(str) {
       enableSideMenu("all");
       switch (str) {	
-        case 'dockage':
-          $("#liDockage").removeClass("active");// 
-          $("#liDockage").addClass("disabled");// for 2nd li disable  
-          document.getElementById('side-menu-dockage').style.color="grey";
-          break;
-        case 'floating':
-          $("#liFloating").removeClass("active");// 
-          $("#liFloating").addClass("disabled");// for 2nd li disable  
-          document.getElementById('side-menu-floating').style.color="grey";
-          break;
-        case 'mooring':
-          $("#liMooring").removeClass("active");// 
-          $("#liMooring").addClass("disabled");// for 2nd li disable  
-          document.getElementById('side-menu-mooring').style.color="grey";
-          break;  
-        case "all":
-        //   $("#liGeneral").removeClass("active");// 
-        //   $("#liGeneral").addClass("disabled");// for 2nd li disable  
-          $("#liDockage").removeClass("active");// 
-          $("#liDockage").addClass("disabled");// for 2nd li disable  
-          document.getElementById('side-menu-dockage').style.color="grey";
-          $("#liFloating").removeClass("active");// 
-          $("#liFloating").addClass("disabled");// for 2nd li disable  
-          document.getElementById('side-menu-floating').style.color="grey";
-          break;
+          case 'dockage':
+              $("#liDockage").removeClass("active");// 
+              $("#liDockage").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-dockage').style.color="grey";
+              break;
+          case 'floating':
+              $("#liFloating").removeClass("active");// 
+              $("#liFloating").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-floating').style.color="grey";
+              break;
+          case 'mooring':
+              $("#liMooring").removeClass("active");// 
+              $("#liMooring").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-mooring').style.color="grey";
+              break;  
+          case 'dbr':
+              $("#liDbr").removeClass("active");// 
+              $("#liDbr").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-dbr').style.color="grey";
+              break;      
+          case "all":
+            //   $("#liGeneral").removeClass("active");// 
+            //   $("#liGeneral").addClass("disabled");// for 2nd li disable  
+              $("#liDockage").removeClass("active");// 
+              $("#liDockage").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-dockage').style.color="grey";
+              $("#liFloating").removeClass("active");// 
+              $("#liFloating").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-floating').style.color="grey";
+              $("#liDbr").removeClass("active");// 
+              $("#liDbr").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-dbr').style.color="grey";
+              break;
       }
     }
     function enableSideMenu(str) {
      
       switch (str) {	
-        case 'dockage':
-          $("#liDockage").removeClass("disabled");// 
-          $("#liDockage").addClass("enabled");// for 2nd li enable  
-          document.getElementById('side-menu-dockage').style.color="black";
-          break;
-        case "floating":
-          $("#liFloating").removeClass("disabled");// 
-          $("#liFloating").addClass("enabled");// for 2nd li enable  
-          document.getElementById('side-menu-floating').style.color="black";
-          break;
-        case "mooring":
-          $("#liMooring").removeClass("disabled");// 
-          $("#liMooring").addClass("enabled");// for 2nd li enable  
-          document.getElementById('side-menu-floating').style.color="black";
-          break;
-        case "all":
-          $("#liDockage").removeClass("disabled");// 
-          $("#liDockage").addClass("enabled");// for 2nd li enable  
-          document.getElementById('side-menu-dockage').style.color="black";
-          $("#liFloating").removeClass("disabled");// 
-          $("#liFloating").addClass("enabled");// for 2nd li enable  
-          document.getElementById('side-menu-floating').style.color="black";
-          break;
+          case 'dockage':
+              $("#liDockage").removeClass("disabled");// 
+              $("#liDockage").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-dockage').style.color="black";
+              break;
+          case "floating":
+              $("#liFloating").removeClass("disabled");// 
+              $("#liFloating").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-floating').style.color="black";
+              break;
+          case "mooring":
+              $("#liMooring").removeClass("disabled");// 
+              $("#liMooring").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-floating').style.color="black";
+              break;
+          case "dbr":
+              $("#liDbr").removeClass("disabled");// 
+              $("#liDbr").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-dbr').style.color="black";
+              break;
+          case "all":
+              $("#liDockage").removeClass("disabled");// 
+              $("#liDockage").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-dockage').style.color="black";
+              $("#liFloating").removeClass("disabled");// 
+              $("#liFloating").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-floating').style.color="black";
+              $("#liDbr").removeClass("disabled");// 
+              $("#liDbr").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-dbr').style.color="black";
+              break;
       }
     }
     function openClick() {

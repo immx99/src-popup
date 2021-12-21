@@ -3,10 +3,12 @@ var iDckg=0;
 var iFloat=0;
 var iMoor=0;
 var iDbr=0;   //Dock Block Removal
+var iBafc=0;
 var dckgTotal=0;
 var floatTotal=0;
 var moorTotal=0;
 var dbrTotal=0;
+var bafcTotal=0;
 var grandTotal=0;
 // var selectedData="Up to 300/Docking & Undocking/warship";
 var title="";
@@ -16,6 +18,7 @@ var newFloatingAccess=true;
 var newMooringAccess=true;
 var newServiceAccess=true;
 var newDbrAccess=true;
+var newBafcAccess=true;
 var newCount=true;
 document.querySelector(".popup-service-item .si-close-btn").addEventListener("click",function() {
   document.querySelector(".popup-service-item").classList.remove("active");
@@ -112,6 +115,10 @@ function side_menu_click(srvID) {
       case "dbr":
         serviceID="dbr";
         disableSideMenu("dbr");
+        break;
+      case "bafc":
+        serviceID="bafc";
+        disableSideMenu("bafc");
         break;
     }
     enableBtn("all");
@@ -296,6 +303,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
   let grossTon;
   let serviceItem;
   let typeOfVessel;
+  var rate=0;
+  var charge=0;
   // let serviceItem;
   // console.log(srcData);
   var str=document.getElementById("container").outerHTML;
@@ -303,7 +312,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
   if (str.indexOf("Gross Ton")==-1) {
       grossTon=selectedData.split("/")[0];
       serviceItem=selectedData.split("/")[1];
-      typeOfVessel=selectedData.split("/")[2];
+      typeOfVessel=selectedData.split("/")[3];
   } else {
      grossTon=document.getElementById("grossTon").innerHTML;
      typeOfVessel=document.getElementById("typeOfVessel").innerHTML;
@@ -332,10 +341,10 @@ function showServiceItem(serviceID,srcData,selectedData) {
               srcData.DockageData[i].grossTon + " </option>";
           }
         }
-      
+        rate=srcData.DockageData[j].docking
         htmlGrossTonString+="</select></td></tr>";
         htmlRateString+="<td><input type='text' id='rate' name='rate' value='" + 
-            formatNumber(srcData.DockageData[j].docking) + "' size='10' readonly onchange='return calculate();'> </td></tr>";
+            formatNumber(rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";
         htmlServiceDataString+='<tr><td><select name="serviceItem" id="serviceItem" onchange="return setRate(\'dockage\');">';
        
         for (let i=0; i<srcData.DockageItemData.length;i++) {
@@ -347,6 +356,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
           
         }
         htmlServiceDataString+="</select></td>";
+       
         break;
     case "floating":
         title="For time spending shipyard areas, floating days to be charged (Excluded Port Authority wharfage charges)";
@@ -376,10 +386,10 @@ function showServiceItem(serviceID,srcData,selectedData) {
               srcData.FloatingData[i].grossTon + " </option>";
           }
         }
-      
+        rate=srcData.srcData.FloatingData[j].rate
         htmlGrossTonString+="</select></td></tr>";
         htmlRateString+="<td><input type='text' id='rate' name='rate' value='" + 
-        formatNumber(srcData.FloatingData[j].rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";
+        formatNumber(rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";
         htmlServiceDataString+='<tr><td><select name="serviceItem" id="serviceItem" onchange="return setRate(\'floating\');">';
         // console.log(htmlServiceDataString);
         for (let i=0; i<srcData.FloatingItemData.length;i++) {
@@ -396,13 +406,19 @@ function showServiceItem(serviceID,srcData,selectedData) {
         var htmlStr=mooring(grossTon,srcData,serviceItem);
         htmlGrossTonString+=htmlStr.split("|")[0];
         htmlRateString+=htmlStr.split("|")[1];
-        htmlServiceDataString+=htmlStr.split("|")[2];
+        htmlServiceDataString+=htmlStr.split("|")[3];
         break;
       case "dbr":
         var htmlStr=dbr(grossTon,srcData,serviceItem);
         htmlGrossTonString+=htmlStr.split("|")[0];
         htmlRateString+=htmlStr.split("|")[1];
-        htmlServiceDataString+=htmlStr.split("|")[2];
+        htmlServiceDataString+=htmlStr.split("|")[3];
+        break;
+      case "bafc":
+        var htmlStr=bafc(grossTon,srcData,serviceItem);
+        htmlGrossTonString+=htmlStr.split("|")[0];
+        htmlRateString+=htmlStr.split("|")[1];
+        htmlServiceDataString+=htmlStr.split("|")[3];
         break;
 }
   // htmlString+='<div class="card">';
@@ -482,16 +498,25 @@ function showServiceItem(serviceID,srcData,selectedData) {
   htmlString+='<td><button type="button" id="minusBtn" class="btn btn-danger btn-sm" disabled>-</button>';                 
   htmlString+="<input type='text' id='qty' name='qty' value='1' onchange='return calculate();'  size='1' >";
   htmlString+='<button type="button" id="plusBtn" class="btn btn-success btn-sm">+</button></td></tr>'; 
-
-  htmlString+="<tr><td colspan='2'><input type='checkbox' id='serviceItemCheckBox' name='serviceItemCheckBox' value ='no' onclick='showHideField()'>";
-  htmlString+='<label for="workingTime">Working Time</label></td>';
-  htmlString+='<td style="visibility:collapse">' + overtimeCmb("t","dckgDocking") + overtimeCmb("d","dckgDocking") +'</td></tr>';
-  
+  if (serviceID != "bafc") {
+      htmlString+="<tr><td colspan='2'><input type='checkbox' id='serviceItemCheckBox' name='serviceItemCheckBox' value ='no' onclick='showHideField()'>";
+      htmlString+='<label for="workingTime">Working Time</label></td>';
+      htmlString+='<td style="visibility:collapse">' + overtimeCmb("t","dckgDocking") + overtimeCmb("d","dckgDocking") +'</td></tr>';   
+  } else {
+      htmlString+='<tr><td><label for="rentalTime">Rental Time</label></td><td></td>';
+      htmlString+=htmlStr.split("|")[4] + "</tr>";
+      htmlString+="<tr><td></td>" + htmlStr.split("|")[5] + "</tr>";
+     
+  }
+  if (rate==0) {
+      rate=parseFloat(htmlStr.split("|")[2]);
+  }
+  console.log(rate);
   htmlString+='<tr><td colspan="2"><label for="rateFactor">Rate Factor</label></td>';
   htmlString+="<td><input type='text' id='rateFactor' name='rateFactor' value='100%' size='4' readonly> </td></tr>";
   htmlString+='<tr><td><label for="charge">Charge</label></td>';
   htmlString+='<td align="right" width="2%"><label for="rateUnit">Rp.</label></td>';
-  htmlString+="<td><input type='text' id='charge' name='charge' value='" + formatNumber(srcData.DockageData[j].docking) + "' size='10' readonly> </td></tr>";
+  htmlString+="<td><input type='text' id='charge' name='charge' value='" + formatNumber(rate) + "' size='10' readonly> </td></tr>";
   htmlString+="</table>" ;            
   htmlString+='</div>';//end-card-body
   htmlString+='<div class="card-footer">';
@@ -536,7 +561,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
           }); 
           document.querySelector(".popup-service-item").classList.remove("active");  
           // document.getElementById("container").insertAdjacentHTML("afterend",proceedClick());
-          str=document.getElementById("container").outerHTML;
+          str=document.getElementById("container").innerHTML;
 
           if (str.indexOf("card-body")==-1) {
               newAccess=true;
@@ -563,22 +588,44 @@ function showServiceItem(serviceID,srcData,selectedData) {
                   document.querySelector("#container #end-service-div").insertAdjacentHTML("beforebegin", str.split("|")[1]);   //service Total 
                   newServiceAccess=false;
               } else {
-                  if (serviceID=="dockage") {
-                      $('#dockageTbl tr:last').after(str.split("|")[0]);
-                      document.getElementById("dockageTotal").innerHTML=str.split("|")[1];
+                  switch (serviceID) {
+                      case "dockage":
+                          $('#dockageTbl tr:last').after(str.split("|")[0]);
+                          document.getElementById("dockageTotal").innerHTML=str.split("|")[1];
+                          break;
+                      case "floating":
+                          $('#floatingTbl tr:last').after(str.split("|")[0]);
+                          document.getElementById("floatingTotal").innerHTML=str.split("|")[1];
+                          break;
+                      case "mooring":
+                          $('#mooringTbl tr:last').after(str.split("|")[0]);
+                          document.getElementById("mooringTotal").innerHTML=str.split("|")[1];
+                          break;
+                      case "dbr":
+                          $('#dbrTbl tr:last').after(str.split("|")[0]);
+                          document.getElementById("dbrTotal").innerHTML=str.split("|")[1];
+                          break;
+                      case "bafc":
+                          $('#bafcTbl tr:last').after(str.split("|")[0]);
+                          document.getElementById("bafcTotal").innerHTML=str.split("|")[1];
+                          break;
                   }
-                  if (serviceID=="floating") { 
-                      $('#floatingTbl tr:last').after(str.split("|")[0]);
-                      document.getElementById("floatingTotal").innerHTML=str.split("|")[1];
-                  }
-                  if (serviceID=="mooring") { 
-                      $('#mooringTbl tr:last').after(str.split("|")[0]);
-                      document.getElementById("mooringTotal").innerHTML=str.split("|")[1];
-                  }
-                  if (serviceID=="dbr") { 
-                    $('#dbrTbl tr:last').after(str.split("|")[0]);
-                    document.getElementById("dbrTotal").innerHTML=str.split("|")[1];
-                }
+                //   if (serviceID=="dockage") {
+                //       $('#dockageTbl tr:last').after(str.split("|")[0]);
+                //       document.getElementById("dockageTotal").innerHTML=str.split("|")[1];
+                //   }
+                //   if (serviceID=="floating") { 
+                //       $('#floatingTbl tr:last').after(str.split("|")[0]);
+                //       document.getElementById("floatingTotal").innerHTML=str.split("|")[1];
+                //   }
+                //   if (serviceID=="mooring") { 
+                //       $('#mooringTbl tr:last').after(str.split("|")[0]);
+                //       document.getElementById("mooringTotal").innerHTML=str.split("|")[1];
+                //   }
+                //   if (serviceID=="dbr") { 
+                //     $('#dbrTbl tr:last').after(str.split("|")[0]);
+                //     document.getElementById("dbrTotal").innerHTML=str.split("|")[1];
+                // }
              }
               
               document.getElementById("grandTotal").innerHTML= str.split("|")[2]; 
@@ -797,8 +844,77 @@ function showServiceItem(serviceID,srcData,selectedData) {
   // console.log(htmlString);
   return 0;
 }
+
+function bafc(grossTon,srcData,serviceItem) {
+  var j=0
+  var htmlGrossTonString="";
+  var htmlServiceDataString="";
+  var htmlRateString=""; 
+  var rate=srcData.boat_and_floating_crane[j].rate
+  title="Boat and Floating Crane";
+  var str=document.getElementById("container").innerHTML;
+  var str1="";
+  if (str.indexOf("TUG BOAT AND CRANES HIRE")==-1) {
+      titleA="TUG BOAT AND CRANES HIRE";
+      title="a. " + title;
+  } else {
+      str1=document.getElementById("bafc-div").innerHTML;
+      if (str.indexOf("b. ")==-1) {
+        title="b. " + title;
+      }
+      if (str.indexOf("a. ")!=-1 && str.indexOf("b. ")!=-1) {
+          title="c. " + title;
+      }
+  }
+ 
+  if (str.indexOf("Gross Ton") != -1) {
+      htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'bafc\');" disabled>';
+  } else {
+      htmlGrossTonString+='<select name="grossTonSelect" id="grossTonSelect" onchange="return setRate(\'bafc\');">';
+  }
+  
+  for(i=0; i < srcData.DockageData.length; i++) {
+    if (srcData.DockageData[i].grossTon==grossTon){      
+        htmlGrossTonString += "<option  value='" + srcData.FloatingData[i].grossTon  + "' selected>" + 
+        srcData.DockageData[i].grossTon + " </option>";
+        j=i;
+    } else {
+        htmlGrossTonString  += "<option  value='" + srcData.DockageData[i].grossTon  + "'>" + 
+        srcData.DockageData[i].grossTon + " </option>";
+    }
+  }
+
+  htmlGrossTonString+="</select></td></tr>";
+  htmlRateString+="<td><input type='text' id='rate' name='rate' value='" + 
+  formatNumber(rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";  //umpan pertama
+  htmlServiceDataString+='<tr><td><select name="serviceItem" id="serviceItem" style="font-weight: bold;" onchange="return setRate(\'bafc\');" style="visibility:visible;">';
+  
+  while (i<96) {
+      if (serviceItem==srcData.boat_and_floating_crane[i].service_item) {
+          htmlServiceDataString+= '<option value="' + srcData.boat_and_floating_crane[i].service_item + '" selected>' + srcData.boat_and_floating_crane[i].service_item + '</option>'; 
+      } else {
+          htmlServiceDataString+= '<option value="' + srcData.boat_and_floating_crane[i].service_item + '">' + srcData.boat_and_floating_crane[i].service_item + '</option>';
+      }
+      i+=8;
+  }
+  htmlServiceDataString+="</select></td>";
+  var htmlRentalTimeString='<td><select  id="workingTime" onchange="return setRate(\'bafc\');" style="visibility:visible;">';
+  htmlRentalTimeString+= '<option value="08.00 - 16.00">08.00 - 16.00</option>';
+  htmlRentalTimeString+= '<option value="16.00 - 20.00">16.00 - 20.00</option>';
+  htmlRentalTimeString+= '<option value="20.00 - 24.00">20.00 - 24.00</option>';
+  htmlRentalTimeString+= '<option value="24.00 - 08.00">24.00 - 08.00</option>';
+  htmlRentalTimeString+="</select></td>";
+  var htmlRentalDayString='<td></td><td><select  id="workingDay" onchange="return setRate(\'bafc\');">';
+  htmlRentalDayString+= '<option value="Monday up to Friday">Monday up to Friday</option>';
+  htmlRentalDayString+= '<option value="Saturday & Sunday/Holiday">Saturday & Sunday/Holiday</option>';
+  htmlRentalDayString+="</select></td>";
+
+  return htmlGrossTonString + "|" + htmlRateString  + "|" + rate + "|" + htmlServiceDataString + "|" + htmlRentalTimeString + "|" + htmlRentalDayString;
+}
+
 function dbr(grossTon,srcData,serviceItem) {
     var j=0
+    var rate=srcData.dock_block_removal[j].rate;
     var htmlGrossTonString="";
     var htmlServiceDataString="";
     var htmlRateString=""; 
@@ -821,7 +937,7 @@ function dbr(grossTon,srcData,serviceItem) {
     htmlGrossTonString+="</select></td></tr>";
    
    htmlRateString+="<td><input type='text' id='rate' name='rate' value='" + 
-   formatNumber(srcData.dock_block_removal[j].rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";  //umpan pertama
+   formatNumber(rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";  //umpan pertama
     htmlServiceDataString+='<tr><td><select name="serviceItem" id="serviceItem" onchange="return setRate(\'dbr\');">';
     // console.log(htmlServiceDataString);
     for (let i=0; i<srcData.dock_block_removal.length;i++) {
@@ -833,7 +949,7 @@ function dbr(grossTon,srcData,serviceItem) {
       
     }
     htmlServiceDataString+="</select></td>";
-    return htmlGrossTonString + "|" + htmlRateString + "|" + htmlServiceDataString;
+    return htmlGrossTonString + "|" + htmlRateString + "|" + rate+ "|" + htmlServiceDataString ;
 }
 
 
@@ -869,10 +985,10 @@ function mooring(grossTon,srcData,serviceItem) {
           srcData.FloatingData[i].grossTon + " </option>";
       }
     }
-
+    rate = srcData.FloatingData[j].mooring_rate;
     htmlGrossTonString+="</select></td></tr>";
     htmlRateString+="<td><input type='text' id='rate' name='rate' value='" + 
-    formatNumber(srcData.FloatingData[j].mooring_rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";  //umpan pertama
+    formatNumber(rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";  //umpan pertama
     htmlServiceDataString+='<tr><td><select name="serviceItem" id="serviceItem" onchange="return setRate(\'mooring\');">';
     // console.log(htmlServiceDataString);
     for (let i=0; i<srcData.MooringItemData.length;i++) {
@@ -884,7 +1000,7 @@ function mooring(grossTon,srcData,serviceItem) {
       
     }
     htmlServiceDataString+="</select></td>";
-    return htmlGrossTonString + "|" + htmlRateString + "|" + htmlServiceDataString;
+    return htmlGrossTonString + "|" + htmlRateString + "|" + rate + "|" + htmlServiceDataString;
 }
 
 function proceedClick(serviceID,newAccess) {
@@ -907,13 +1023,22 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='</div>';  //end card-body parent
      
       htmlString+='</table>';
+      htmlString+='<div id="' + serviceID + '-div">';
+      htmlString+='<div class="card">'; //begin card child
       if ( serviceID=="floating" || serviceID=="mooring") {
           htmlString+='<div class="card-header">';
           htmlString+='<h4 id="title">FLOATING CHARGE IN SHIPYARD AREA</h4>';
           htmlString+='</div>';
       }
-      htmlString+='<div id="' + serviceID + '-div">';
-      htmlString+='<div class="card">'; //begin card child
+
+      if (serviceID=="bafc") {
+          titleA="TUG BOAT AND CRANES HIRE";
+          // title="a. " + title;
+          htmlString+='<div class="card-header">';
+          htmlString+='<h4 id="title">' + titleA + '</h4>';
+          htmlString+='</div>';
+      }
+     
       htmlString+='<div class="card-header">'; //begin card-header chile
       htmlString+='<h4 id="title">' + title + '</h4>';
       htmlString+='</div>'; //end card-header child
@@ -947,25 +1072,35 @@ function proceedClick(serviceID,newAccess) {
               htmlString+="<td size='1'  style='text-align:right'>Rp. </td>";
               dckgTotal+=unformatNumber(document.getElementById("charge").value);  
               htmlString+= "<td style='text-align:right'  id='tdDockageTotal'>" + document.getElementById("charge").value + "</td></tr>"; 
-              
+              newDockageAccess=false;
               break; 
           case "floating":
               iFloat++;
               htmlString+='<tr><td width="80%" style="text-align:right" id="tdFloatingCount">Floating Charge Total: ( ' + iFloat + ' )</td>';
               floatTotal+=unformatNumber(document.getElementById("charge").value);  
-              htmlString+= "<td style='text-align:right' id='tdFloatingTotal'>" + formatNumber(floatTotal) + "</td></tr>";  
+              htmlString+= "<td style='text-align:right' id='tdFloatingTotal'>" + formatNumber(floatTotal) + "</td></tr>"; 
+              newFloatingAccess=false; 
               break;
           case "mooring":
               iMoor++;
               htmlString+='<tr><td width="80%" style="text-align:right" id="tdMooringCount">Mooring Charge Total: ( ' + iMoor + ' )</td>';
               moorTotal+=unformatNumber(document.getElementById("charge").value);  
               htmlString+= "<td style='text-align:right' id='tdMooringTotal'>" + formatNumber(moorTotal) + "</td></tr>";  
+              newMooringAccess=false;
               break;
           case "dbr":
               iDbr++;
               htmlString+='<tr><td width="80%" style="text-align:right" id="tdDbrCount">Dock Block Removal Charge Total: ( ' + iDbr + ' )</td>';
               dbrTotal+=unformatNumber(document.getElementById("charge").value);  
-              htmlString+= "<td style='text-align:right' id='tdDbrTotal'>" + formatNumber(moorTotal) + "</td></tr>";  
+              htmlString+= "<td style='text-align:right' id='tdDbrTotal'>" + formatNumber(dbrTotal) + "</td></tr>";  
+              newDbrAccess=false;
+              break;
+          case "bafc":
+              iBafc++;
+              htmlString+='<tr><td width="80%" style="text-align:right" id="tdBafcCount">Boat and Floating Crane Rental Charge Total: ( ' + iBafc + ' )</td>';
+              bafcTotal+=unformatNumber(document.getElementById("charge").value);  
+              htmlString+= "<td style='text-align:right' id='tdDbrTotal'>" + formatNumber(bafcTotal) + "</td></tr>";  
+              newBafcAccess=false;
               break;
      }
      
@@ -974,7 +1109,7 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='</div>';  //end card-body child
       htmlString+='</div>';  //end-card child
       htmlString+="<div id='end-service-div'></div>"; //#end-service-div
-      htmlString+='<div class="card-body">'; //card body parent
+      htmlString+='<div class="card-footer">'; //card body parent
       htmlString+="<div id='grandTotal'>";
       htmlString+='<table width=98% id="tblGrandTotal">';
       htmlString+='<tr><td width="80%" style="text-align:right" ><b>Grand Total</b></td>';
@@ -996,17 +1131,23 @@ function proceedClick(serviceID,newAccess) {
       // htmlString+='<button type="button" id= "dckgEditBtn" class="btn btn-info float-right" disabled>Edit</button>';
       // htmlString+='</div>';  //end-card-footers
      
-      switch(serviceID) {
-        case "dockage":
-            newDockageAccess=false;
-            break;
-        case "floating":
-            newFloatingAccess=false;
-            break;
-        case "mooring":
-            newMooringAccess=false;
-            break;
-      }
+      // switch(serviceID) {
+      //   case "dockage":
+      //       newDockageAccess=false;
+      //       break;
+      //   case "floating":
+      //       newFloatingAccess=false;
+      //       break;
+      //   case "mooring":
+      //       newMooringAccess=false;
+      //       break;
+      //   case "dbr":
+      //       newDbrAccess=false;
+      //       break;
+      //   case "bafc":
+      //       newBafcAccess=false;
+      //       break;
+      // }
       htmlString+="|" + htmlButtonString;
   } else {
     //  htmlTotalString+="<div id='" + serviceID + "Total'>";
@@ -1296,7 +1437,91 @@ function proceedClick(serviceID,newAccess) {
                 countServiceItem=iDbr;
             }
             break;
-
+        case "bafc":
+          iBafc++;
+          bafcTotal+=unformatNumber(document.getElementById("charge").value);
+          if ( newBafcAccess==true) {
+              htmlString+='<div id="bafc-div">'
+              htmlString+='<div class="card">';  //begin floating card child
+              if (str.indexOf("TUG BOAT AND CRANES HIRE")==-1) {
+                  titleA="TUG BOAT AND CRANES HIRE";
+                  // title="title;
+                  htmlString+='<div class="card-header">';
+                  htmlString+='<h4 id="title">' + titleA + '</h4>';
+                  htmlString+='</div>';
+                  htmlString+='<div class="card-header">';
+                  htmlString+='<h4 id="title">' + title + '</h4>';
+                  htmlString+='</div>';
+              }
+              // } else {
+              //     str1=document.getElementById("bafc-div").innerHTML;
+              //     if (str.indexOf("b. ")==-1) {
+              //       title="b. " + title;
+              //       htmlString+='<div class="card-header">';
+              //       htmlString+='<h4 id="title">' + title + '</h4>';
+              //       htmlString+='</div>';
+              //     }
+              //     if (str.indexOf("b. ")!=-1 && str.indexOf("c. ")==-1) {
+              //         title="c. " + title;
+              //         htmlString+='<div class="card-header">';
+              //         htmlString+='<h4 id="title">' + title + '</h4>';
+              //         htmlString+='</div>';
+              //     }
+              // }
+              
+            
+              htmlString+='<div class="card-body">'; //begin dbr card-body child
+              htmlString+='<table  width=98% id="bafcTbl">';
+              htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
+              htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
+              htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
+              htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+              htmlString+= document.getElementById("rate").value;
+              if (document.getElementById("workingTime").style.visibility=="visible") {
+                htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
+                htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
+              }
+              htmlString+='</td><td></td>';
+              htmlString+='<td class="edit-and-delete-column">'; 
+              htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
+              htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
+              htmlString+='</div></td></tr>';   //0 --htmlString
+              htmlString+='</table>';
+              
+              htmlString+="<div id='" + serviceID + "Total'>"; 
+              htmlString+='<table width=98% id="bafcTblTotal">';
+              htmlString+='<tr><td width="80%" style="text-align:right" id="tdBafcCount">Boat and Floating Crane Rental Charge Total: ( ' + iBafc + ' )</td>';
+              htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
+              htmlString+= "<td style='text-align:right' id='tdBafcTotal'>" + formatNumber(bafcTotal) + "</td></tr></table></div>"; 
+              htmlString+='</div></div></div>'; //end card-body, end card dan end floating-div
+              countServiceItem=iBafc;
+              newBafcAccess=false;
+          } else {
+              htmlString+='<tr><td width="80%" style="font-size:18px" >' + document.getElementById("serviceItem").value + '</td>';
+              htmlString+="<td size='1'  style='text-align:right'>Rp. </td>"
+              htmlString+= "<td style='text-align:right'>" + document.getElementById("charge").value + "</td></tr>";  
+              htmlString+='<tr><td  width="80%" style="font-size:14px;">' + document.getElementById("qty").value + " Qty - @ Rp. ";
+              htmlString+= document.getElementById("rate").value;
+              
+              if (document.getElementById("workingTime").style.visibility=="visible") {
+                  htmlString+= " with Working Time at " + document.getElementById("workingTime").value + "  on  " +  document.getElementById("workingDay").value ;
+                  htmlString+= " and rate factor is "  + document.getElementById("rateFactor").value ;
+              }
+          
+              // htmlString+='</td><td id="tdServiceID">' + serviceID + '</td>'; // style="visibility:collapse"
+              htmlString+='</td><td></td>';
+              htmlString+='<td class="edit-and-delete-column">'; 
+              htmlString+= '<div class="edit-and-delete-div"><button type="button" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"> Edit </span></button>';
+              htmlString+='<button type="button" class="btn btn-default btn-sm btnDelete"><span class="glyphicon glyphicon-trash"> Delete </span></button>';
+              htmlString+='</div></td></tr>';   //0 --htmlString
+              htmlTotalString+='<table width=98% id="bafcTblTotal">';
+              htmlTotalString+='<tr><td width="80%" style="text-align:right" id="tdBafcCount" >Boat and Floating Crane Rental Charge Total: ( ' + iBafc + ' )</td>';
+              htmlTotalString+="<td size='1'  style='text-align:right'>Rp. </td>"
+              htmlTotalString+= "<td style='text-align:right' id='tdBafcTotal'>" + formatNumber(bafcTotal) + "</td></tr></table>"; 
+              countServiceItem=iBafc;
+          }
+          break;
+  
      }
      
       // htmlString+='<table  width=98% id="tblServiceItemsData">';
@@ -1329,6 +1554,7 @@ function setRate(serviceID) {
   // console.log("SI=" + serviceID);
   let grossTonIdx=document.getElementById("grossTonSelect").selectedIndex
   let serviceItemIdx=document.getElementById("serviceItem").selectedIndex
+  var rowTblIdx=0;
   $.ajax({
     url:'src_data.json',
     dataType:'json',
@@ -1405,6 +1631,24 @@ function setRate(serviceID) {
               document.getElementById("rate").setAttribute('readonly', true);
               document.getElementById("rate").style.backgroundColor="white";
               break;
+          case "bafc":
+              rowTblIdx=serviceItemIdx*8;
+              // console.log(document.getElementById("rentalDay").value);
+              // console.log(document.getElementById("rentalTime").value);
+              for (let i=rowTblIdx; i<rowTblIdx+8; i++ ) {
+                  // console.log(data.boat_and_floating_crane[i].working_day);
+                  // console.log(data.boat_and_floating_crane[i].working_time);
+                  if (document.getElementById("workingDay").value==data.boat_and_floating_crane[i].working_day 
+                    && document.getElementById("workingTime").value==data.boat_and_floating_crane[i].working_time) {
+                      document.getElementById("rateFactor").value=data.boat_and_floating_crane[i].rate_factor + "%";
+                      document.getElementById("rate").value=formatNumber(data.boat_and_floating_crane[i].rate);
+                  }
+              }
+              
+              document.getElementById("rate").setAttribute('readonly', true);
+              document.getElementById("rate").style.backgroundColor="white";
+              break;
+
 
       }
      
@@ -1461,4 +1705,3 @@ function showLoginForm() {
   document.querySelector(".popup-login .form").innerHTML=htmlString;
   return htmlString;
 }
-

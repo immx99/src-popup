@@ -94,7 +94,8 @@
                     href='javascript:void(0);' onclick='side_menu_click("dbr")'>3. Dock Block Removal</a> </li>
               <li><a href="#">4. Tug Boat and Cranes Hire</a> 
                 <ul>
-                  <li> <a href="#link5">a. Boat and Floating Crane</a> </li>
+                <li  class='active' id='liBafc'> <a id='side-menu-bafc' class='nav-link bafc'
+                    href='javascript:void(0);' onclick='side_menu_click("bafc")'>a. Boat and Floating Crane</a> </li>
                   <li> <a href="#link6">b. Dock and Mobile Crane</a> </li>
                   <li> <a href="#link6">c. Forklift</a> </li>
                 </ul>
@@ -281,6 +282,11 @@
               $("#liDbr").addClass("disabled");// for 2nd li disable  
               document.getElementById('side-menu-dbr').style.color="grey";
               break;      
+          case 'bafc':
+              $("#liBafc").removeClass("active");// 
+              $("#liBafc").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-bafc').style.color="grey";
+              break;      
           case "all":
             //   $("#liGeneral").removeClass("active");// 
             //   $("#liGeneral").addClass("disabled");// for 2nd li disable  
@@ -293,6 +299,9 @@
               $("#liDbr").removeClass("active");// 
               $("#liDbr").addClass("disabled");// for 2nd li disable  
               document.getElementById('side-menu-dbr').style.color="grey";
+              $("#liBafc").removeClass("active");// 
+              $("#liBafc").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-bafc').style.color="grey";
               break;
       }
     }
@@ -319,6 +328,11 @@
               $("#liDbr").addClass("enabled");// for 2nd li enable  
               document.getElementById('side-menu-dbr').style.color="black";
               break;
+          case "bafc":
+              $("#liBafc").removeClass("disabled");// 
+              $("#liBafc").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-bafc').style.color="black";
+              break;
           case "all":
               $("#liDockage").removeClass("disabled");// 
               $("#liDockage").addClass("enabled");// for 2nd li enable  
@@ -329,6 +343,9 @@
               $("#liDbr").removeClass("disabled");// 
               $("#liDbr").addClass("enabled");// for 2nd li enable  
               document.getElementById('side-menu-dbr').style.color="black";
+              $("#liBafc").removeClass("disabled");// 
+              $("#liBafc").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-bafc').style.color="black";
               break;
       }
     }

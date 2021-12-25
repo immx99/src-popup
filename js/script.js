@@ -567,8 +567,14 @@ function showServiceItem(serviceID,srcData,selectedData) {
               newAccess=true;
               newServiceAccess=false;
               htmlString=proceedClick(serviceID,newAccess);
+            //   var htmlSaveString='<form  method="POST"  id="webpage-form" class="webpage-form">';
+            //   htmlSaveString+="<input id='webpage-input' type='textarea' value=''>";
+            //   htmlSaveString+="<input id='propid' type='text' value='00000299'>";
               document.getElementById("container").innerHTML=htmlString.split("|")[0];
+            //   document.getElementById("card").insertAdjacentHTML("afterend",htmlSaveString);
               document.getElementById("button-panel").innerHTML=htmlString.split("|")[1];
+            //   htmlSaveString="</form>";
+            //   document.getElementById("button-panel").insertAdjacentHTML("afterend",htmlSaveString);
           } else {
               newAccess=false;
               // document.querySelector("#container .card-footer").insertAdjacentHTML("beforebegin", proceedClick(newAccess)); 
@@ -642,6 +648,82 @@ function showServiceItem(serviceID,srcData,selectedData) {
                 $(document).ready(function(){
                   $(".fullscreen-container").fadeTo(200,1);
                 });
+            });
+            $('#printBtn').click(function () {
+                // console.log("clickPrint");
+                // document.querySelector(".popup-service-item").classList.add("active");
+                // generatePDF();
+                // var divContents = $("#card").html();
+                // document.querySelector(".edit-and-delete-div").style.display = 'none';
+                var keepContents=document.getElementById("container").innerHTML;
+                var ele = document.getElementsByClassName('edit-and-delete-div');
+                for (var i = 0; i < ele.length; i++ ) {
+                    ele[i].style.display = "none";
+                }
+                var divContents =document.getElementById("container").innerHTML;
+                var printWindow = window.open('', '', 'height=400,width=800');
+                // var elementHandler = {
+                //     '.edit-and-delete-div': function (element, renderer) {
+                //       return true;
+                //     }
+                //   };
+                printWindow.document.write('<html><head><title>Print it!</title><link rel="stylesheet" type="text/css" href="style.css" media="print" />');
+                printWindow.document.write('<style type="text/css">.style1{width: 100%;}</style>');
+                printWindow.document.write('</head><body >');
+                printWindow.document.write(divContents);
+                printWindow.document.write('</body></html>');
+               
+                setTimeout(function () {
+                    printWindow.document.close();
+                }, 250);
+                document.getElementById("container").innerHTML=keepContents;
+                printWindow.print();
+                
+                return true;
+                
+                // // $(document).ready(function(){
+                //   $(".fullscreen-container").fadeTo(200,1);
+                // });
+                // var win = window.open('','printwindow');
+                // win.document.write('<html><head><title>Print it!</title><link rel="stylesheet" type="text/css" href="styles.css"></head><body>');
+                // win.document.write($("#content").html());
+                // win.document.write('</body></html>');
+                // win.print();
+                // win.close();
+                // demoFromHTML();
+                // var doc = new jsPDF();           
+                // var elementHandler = { 
+                //     '.edit-and-delete-div': function (element, renderer) { 
+                //         return true; 
+                //     } 
+                // }; 
+                // var source = window.document.getElementById("container"); 
+                // doc.fromHTML( 
+                //     source, 
+                //     15, 
+                //     15, 
+                //     { 
+                //     'width': 180,'elementHandlers': elementHandler 
+                //     }); 
+                
+                // doc.output("dataurlnewwindow");    
+
+            });
+            $('#saveBtn').click(function () {
+               
+                var webpage = $('#card').html();
+                var propid="0000299";
+                $.ajax({
+                    method: "POST",
+                    url: 'php/insert_data.php',
+                    data: {web_page: webpage, prop_id: propid},
+                }).done (function(response) {
+                    alert("suksess");
+                  }).fail(function( jqXHR, textStatus ) {
+                    alert("gagal");
+                  });
+               
+
             });
            
             $("#dockageTbl").on('click','.btnDelete',function(){
@@ -904,7 +986,7 @@ function bafc(grossTon,srcData,serviceItem) {
   htmlRentalTimeString+= '<option value="20.00 - 24.00">20.00 - 24.00</option>';
   htmlRentalTimeString+= '<option value="24.00 - 08.00">24.00 - 08.00</option>';
   htmlRentalTimeString+="</select></td>";
-  var htmlRentalDayString='<td></td><td><select  id="workingDay" onchange="return setRate(\'bafc\');">';
+  var htmlRentalDayString='<td></td><td><select id="workingDay" onchange="return setRate(\'bafc\');">';
   htmlRentalDayString+= '<option value="Monday up to Friday">Monday up to Friday</option>';
   htmlRentalDayString+= '<option value="Saturday & Sunday/Holiday">Saturday & Sunday/Holiday</option>';
   htmlRentalDayString+="</select></td>";
@@ -1013,7 +1095,7 @@ function proceedClick(serviceID,newAccess) {
   var str=document.getElementById("container").innerHTML;
   if (newAccess==true) {
      
-      htmlString+='<div class="card">'; //card parent
+      htmlString+='<div id="card" class="card">'; //card parent
       htmlString+='<div class="card-body">'; //card body parent
       htmlString+='<table  width=50% id="tblStaticData">';
       htmlString+="<tr><td>Gross Ton or Displacement</td><td size='1'>:</td>"; 
@@ -1633,15 +1715,16 @@ function setRate(serviceID) {
               break;
           case "bafc":
               rowTblIdx=serviceItemIdx*8;
-              // console.log(document.getElementById("rentalDay").value);
-              // console.log(document.getElementById("rentalTime").value);
+              console.log(document.getElementById("workingDay").value);
+              console.log(document.getElementById("workingTime").value);
               for (let i=rowTblIdx; i<rowTblIdx+8; i++ ) {
-                  // console.log(data.boat_and_floating_crane[i].working_day);
-                  // console.log(data.boat_and_floating_crane[i].working_time);
+                  console.log(data.boat_and_floating_crane[i].working_day);
+                  console.log(data.boat_and_floating_crane[i].working_time);
                   if (document.getElementById("workingDay").value==data.boat_and_floating_crane[i].working_day 
                     && document.getElementById("workingTime").value==data.boat_and_floating_crane[i].working_time) {
                       document.getElementById("rateFactor").value=data.boat_and_floating_crane[i].rate_factor + "%";
                       document.getElementById("rate").value=formatNumber(data.boat_and_floating_crane[i].rate);
+                      i=rowTblIdx+8;
                   }
               }
               
@@ -1704,4 +1787,64 @@ function showLoginForm() {
   htmlString+='<div class="form-element"><a href="#">Forgot Password?</a></div>';
   document.querySelector(".popup-login .form").innerHTML=htmlString;
   return htmlString;
+}
+
+function demoFromHTML() {
+    var pdf = new jsPDF('p', 'pt', 'letter');
+    // source can be HTML-formatted string, or a reference
+    // to an actual DOM element from which the text will be scraped.
+    source = $('#container')[0];
+    console.log("masuk pak Eko");
+    // we support special element handlers. Register them with jQuery-style 
+    // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+    // There is no support for any other type of selectors 
+    // (class, of compound) at this time.
+    specialElementHandlers = {
+        // element with id of "bypass" - jQuery style selector
+        '.edit-and-delete-div': function (element, renderer) {
+            // true = "handled elsewhere, bypass text extraction"
+            return true
+        }
+    };
+    margins = {
+        top: 80,
+        bottom: 60,
+        left: 40,
+        width: 522
+    };
+    // all coords and widths are in jsPDF instance's declared units
+    // 'inches' in this case
+    pdf.fromHTML(
+        source, // HTML string or DOM elem ref.
+        margins.left, // x coord
+        margins.top, { // y coord
+            'width': margins.width, // max width of content on PDF
+            'elementHandlers': specialElementHandlers
+        },
+
+        function (dispose) {
+            // dispose: object with X, Y of the last line add to the PDF 
+            //          this allow the insertion of new lines after html
+            pdf.save('Test.pdf');
+        }, margins
+    );
+}
+
+
+function generatePDF() {
+
+    // Choose the element that our invoice is rendered in.
+    const element = document.getElementById("card");
+
+    // clone the element
+    var clonedElement = element.cloneNode(true);
+
+    // change display of cloned element 
+    $(clonedElement).css("display", "block");
+
+    // Choose the clonedElement and save the PDF for our user.
+    html2pdf(clonedElement);
+
+    // remove cloned element
+    clonedElement.remove();
 }

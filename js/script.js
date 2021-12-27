@@ -20,6 +20,7 @@ var newServiceAccess=true;
 var newDbrAccess=true;
 var newBafcAccess=true;
 var newCount=true;
+var saveBtnAccess=true;
 document.querySelector(".popup-service-item .si-close-btn").addEventListener("click",function() {
   document.querySelector(".popup-service-item").classList.remove("active");
   $(document).ready(function(){
@@ -103,6 +104,12 @@ function side_menu_click(srvID) {
         // console.log("dockageClick");
         serviceID="dockage";
         disableSideMenu("dockage");
+        if (document.getElementById("dockage-div")) {
+            // alert("masuk dockage div sdh ada");
+            newAccess=false;
+            newDockageAccess=false;
+            newServiceAccess=false;
+        }
         break;
       case "floating":
         serviceID="floating";
@@ -122,7 +129,7 @@ function side_menu_click(srvID) {
         break;
     }
     enableBtn("all");
-    newServiceAccess=true;
+   
     $.ajax({
       url:'src_data.json',
       dataType:'json',
@@ -386,7 +393,8 @@ function showServiceItem(serviceID,srcData,selectedData) {
               srcData.FloatingData[i].grossTon + " </option>";
           }
         }
-        rate=srcData.srcData.FloatingData[j].rate
+        // alert(j + ", " + grossTon);
+        rate=srcData.FloatingData[j].rate;
         htmlGrossTonString+="</select></td></tr>";
         htmlRateString+="<td><input type='text' id='rate' name='rate' value='" + 
         formatNumber(rate) + "' size='10' readonly onchange='return calculate();'> </td></tr>";
@@ -511,7 +519,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
   if (rate==0) {
       rate=parseFloat(htmlStr.split("|")[2]);
   }
-  console.log(rate);
+//   console.log(rate);
   htmlString+='<tr><td colspan="2"><label for="rateFactor">Rate Factor</label></td>';
   htmlString+="<td><input type='text' id='rateFactor' name='rateFactor' value='100%' size='4' readonly> </td></tr>";
   htmlString+='<tr><td><label for="charge">Charge</label></td>';
@@ -710,22 +718,27 @@ function showServiceItem(serviceID,srcData,selectedData) {
 
             });
             $('#saveBtn').click(function () {
-               
-                var webpage = $('#card').html();
-                var propid="0000299";
-                $.ajax({
-                    method: "POST",
-                    url: 'php/insert_data.php',
-                    data: {web_page: webpage, prop_id: propid},
-                }).done (function(response) {
-                    alert("suksess");
-                  }).fail(function( jqXHR, textStatus ) {
-                    alert("gagal");
-                  });
-               
+                // alert("Saving");
+                if (saveBtnAccess==true) {
+                        // var webPage = $('#container').html();
+                        var webPage= document.getElementById("container").innerHTML;
+                        var propid= document.getElementById("tdPropID").innerHTML;
+                        $.ajax({
+                            method: "POST",
+                            url: 'php/insert_data.php',
+                            data: {web_page: webPage, prop_id: propid},
+                        }).done (function(response) {
+                            alert("Saving succeeded");
+                            saveBtnAccess=true;
+                        }).fail(function( jqXHR, textStatus ) {
+                            alert("Failure");
+                        });  
+                        saveBtnAccess=false;     
+                }
 
             });
            
+
             $("#dockageTbl").on('click','.btnDelete',function(){
                 console.log(newCount);
                 var rowIndex=$(this).closest('tr').index();
@@ -877,7 +890,7 @@ function showServiceItem(serviceID,srcData,selectedData) {
                   console.log("mooring Count= " + $(this).closest('#mooring-div').find("#tdMooringCount").text().split(" ")[4]);
                   iMoor=parseInt($(this).closest('#mooring-div').find("#tdMooringCount").text().split(" ")[4]) - 1;
                   // var iDckgx=document.getElementById("tdMooringCount").outerHTML;
-                  console.log("iMoor=" + iMoor);
+                //   console.log("iMoor=" + iMoor);
                   if ( iMoor > 0) {
                       document.getElementById("tdMooringCount").innerHTML= 'mooring Charge Total: ( ' + iMoor.toString() + ' )';
                       document.getElementById("tdMooringTotal").innerHTML=formatNumber(moorTotal);
@@ -892,11 +905,11 @@ function showServiceItem(serviceID,srcData,selectedData) {
                   
                   // console.log("Grand Total =" + $(this).closest('.card-body').find("#tdGrandTotal").text());
                   // console.log("Grand Total =" + document.getElementById("#tdGrandTotal").outerHTML);
-                  console.log("Grand Total =" +  document.querySelector("#container #tdGrandTotal").innerHTML);
+                //   console.log("Grand Total =" +  document.querySelector("#container #tdGrandTotal").innerHTML);
                   // document.querySelector(".popup-service-item .si-close-btn")
                   // grandTotal=unformatNumber(document.ge("#tdGrandTotal").innerHTML);
                   grandTotal-=deleteRate;
-                  console.log("Grand Total setelah dikurangi =" + grandTotal);
+                //   console.log("Grand Total setelah dikurangi =" + grandTotal);
                   if (grandTotal>0 ) {
                       document.getElementById("tdGrandTotal").innerHTML=formatNumber(grandTotal);
                     
@@ -1098,6 +1111,17 @@ function proceedClick(serviceID,newAccess) {
       htmlString+='<div id="card" class="card">'; //card parent
       htmlString+='<div class="card-body">'; //card body parent
       htmlString+='<table  width=50% id="tblStaticData">';
+      htmlString+= "<tr><td>ID</td><td size='1'>:</td>"; 
+      htmlString+='<td id="tdPropID">' + document.getElementById("storage").value.split("|")[0] + '</td></tr>';
+      htmlString+= "<tr><td>Date</td><td size='1'>:</td>"; 
+      const d = new Date();
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      let month = months[d.getMonth()];
+      let day= d.getDate();
+      let year= d.getFullYear();
+      var calendar= months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+
+      htmlString+='<td>' + calendar + '</td></tr>';
       htmlString+="<tr><td>Gross Ton or Displacement</td><td size='1'>:</td>"; 
       htmlString+='<td id="grossTon" width="50%" style="text-align:left;">' + document.getElementById("grossTonSelect").value + "</td></tr>";
       htmlString+="<tr><td>Type of Vessel</td><td size='1'>:</td>";
@@ -1794,7 +1818,7 @@ function demoFromHTML() {
     // source can be HTML-formatted string, or a reference
     // to an actual DOM element from which the text will be scraped.
     source = $('#container')[0];
-    console.log("masuk pak Eko");
+    // console.log("masuk pak Eko");
     // we support special element handlers. Register them with jQuery-style 
     // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
     // There is no support for any other type of selectors 

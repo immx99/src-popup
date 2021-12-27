@@ -390,6 +390,91 @@
 
 
   </script>
+
+
+<?php
+if (isset($_GET["newfile"])) {
+    $newFile=$_GET["newfile"];
+    $renewal=$_GET["renewal"];
+    $open=$_GET["open"];
+    // if (strlen(trim($_GET["propID"]))<1 ) {
+    if ($newFile=="yes" || $renewal=="yes") {
+    //   $propID=$_GET["propid"];
+    //   if ( $propID==null) {
+      //  echo "new file= " . $newFile;
+        $myCounterFile= fopen("counter.txt", "r") or die("Unable to open file!");
+            $propNbr=fgets($myCounterFile);
+            $propNbr+=1;
+        fclose( $myCounterFile);
+        $myCounterFile= fopen("counter.txt", "w") or die("Unable to open file!");
+            fwrite($myCounterFile, $propNbr);
+        fclose( $myCounterFile);
+        $propID=str_repeat("0",7-(strlen((String) $propNbr))) . (String) $propNbr;
+        // echo "propID =" . $propID;
+      
+    } else {
+        $newFile="no";
+        $propID="xxxxxxx";
+        $open="no";
+    }
+} else {
+    // echo "masuk";
+    $newFile="no";
+    $renewal="no";
+    $propID="xxxxxxx";
+    $open="no";
+}
+  // echo "propID=" . $propID;
+?>
+ 
+ <!-- <span id="storage" propid="<?php // $propID; ?>" newFile="<?php //echo $newfile; ?>"></span> -->
+ <input type='hidden' id='storage' name='storage' value='<?php echo $propID . "|" . $newFile . "|" . $renewal . "|" . $open;?>'>
+ 
+ <script>
+ 
+   
+   
+    var propID = "";
+    var newFile = "";
+    // window.onload = function(){
+    //     propNbr = document.getElementById("storage").getAttribute("counter");
+    //     console.log("propNbr=" + propNbr);
+    //     alert("propNbr=" + propNbr);
+    //     newFile = document.getElementById("storage").getAttribute("newfile");
+    //     propID="0".repeat(7-propNbr.length) + propNbr;
+    //     alert("propID=" + propID);
+    // }
+    propID = document.getElementById("storage").value.split("|")[0];
+    // alert("propID=" + propID);()
+    newFile= document.getElementById("storage").value.split("|")[1];
+    renewal= document.getElementById("storage").value.split("|")[2];
+    console.log("newfile=" + newFile);
+    if (newFile=="yes") {
+        // alert("masuk new file yes");
+        enableSideMenu("all");
+        $("#liCreateNew").removeClass("active");// 
+        $("#liCreateNew").addClass("disabled");// for 2nd li disable  
+        $("#liOpenProp").removeClass("active");// 
+        $("#liOpenProp").addClass("disabled");// for 2nd li disable  
+        $("#liRenewal").removeClass("active");
+        $("#liRenewal").addClass("disabled");
+        document.getElementById('liCreateNew').style.color="grey"; //tidak jalan
+        propID="0".repeat(7-propID.length) + propID;
+        // alert("propID=" + propID);
+        if (renewal=="yes") {
+            renewalClick();
+        } else {
+            // side_menu_click("dockage");
+        }
+       
+    } else {
+        // alert("masuk disable menu");
+        disableSideMenu("all");
+    }
+ </script>
+
+
+
   <div id="container" class="container"></div>  
   <div id="button-panel" class="button-panel"></div>
   <script src="js/script.js"></script>

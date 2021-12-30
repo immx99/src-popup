@@ -109,21 +109,36 @@
               </li>
               <li><a href="#">6. Other Sevices</a> 
                 <ul>
-                  <li> <a href="#link5">a. Fresh Water Supply</a> </li>
-                  <li> <a href="#link6">b. Compressed Air Supply</a> </li>
-                  <li> <a href="#link6">c. Pilotage</a> </li>
-                  <li> <a href="#link5">d. Fire Guard</a> </li>
-                  <li> <a href="#link6">e. Watchman</a> </li>
-                  <li> <a href="#link6">f. Diver Service</a> </li>
-                  <li> <a href="#link5">g. Garbage Disposal</a> </li>
-                  <li> <a href="#link6">h. Oil Storing in Barge</a> </li>
-                  <li> <a href="#link6">i. Flat Top Barge (in Shipyard Area)</a> </li>
-                  <li> <a href="#link5">j. Telephone</a> </li>
-                  <li> <a href="#link6">k. Fire Precaution</a> </li>
-                  <li> <a href="#link6">l. Staging</a> </li>
-                  <li> <a href="#link5">m. Ventilation </li>
-                  <li> <a href="#link6">n. Bilge Pumps</a> </li>
-                  <li> <a href="#link6">o. Ballast Water</a> </li>
+                   <li class='active' id='liFws'> <a id='side-menu-fws' class='nav-link fws'
+                        href='javascript:void(0);' onclick='side_menu_click("fws")'>a. Fresh Water Supply</a> </li>
+                    <li class='active' id='liCas'> <a id='side-menu-cas' class='nav-link cas'
+                        href='javascript:void(0);' onclick='side_menu_click("cas")'>b. Compressed Air Supply</a> </li>
+                    <li class='active' id='liPilotage'> <a id='side-menu-pilotage' class='nav-link pilotage'
+                        href='javascript:void(0);' onclick='side_menu_click("pilotage")'>c. Pilotage</a> </li>
+                    <li class='active' id='liFg'> <a id='side-menu-fg' class='nav-link fg'
+                        href='javascript:void(0);' onclick='side_menu_click("fg")'>d. Fire Guard</a> </li>
+                        <li class='active' id='liWatchman'> <a id='side-menu-watchman' class='nav-link watchman'
+                        href='javascript:void(0);' onclick='side_menu_click("watchman")'>e. Watchman</a> </li>
+                    <li class='active' id='liDs'> <a id='side-menu-ds' class='nav-link ds'
+                        href='javascript:void(0);' onclick='side_menu_click("ds")'>f. Diver Service</a> </li>
+                    <li class='active' id='liGd'> <a id='side-menu-gd' class='nav-link gd'
+                        href='javascript:void(0);' onclick='side_menu_click("gd")'>g. Garbage Disposal</a> </li>
+                    <li class='active' id='liOsib'> <a id='side-menu-osib' class='nav-link osib'
+                        href='javascript:void(0);' onclick='side_menu_click("osib")'>h. Oil Storing in Barge</a> </li>
+                    li class='active' id='liFtb'> <a id='side-menu-ftb' class='nav-link ftb'
+                        href='javascript:void(0);' onclick='side_menu_click("ftb")'>i. Flat Top Barge (in Shipyard Area)</a> </li>
+                    <li class='active' id='liTlp'> <a id='side-menu-tlp' class='nav-link tlp'
+                        href='javascript:void(0);' onclick='side_menu_click("tlp")'>j. Telephone</a> </li>
+                    li class='active' id='liFp'> <a id='side-menu-osib' class='nav-link fp'
+                        href='javascript:void(0);' onclick='side_menu_click("fp")'>k. Fire Precaution</a> </li>
+                    <li class='active' id='liStaging'> <a id='side-menu-staging' class='nav-link staging'
+                        href='javascript:void(0);' onclick='side_menu_click("staging")'>l. Staging</a> </li>
+                    <li class='active' id='liVentilation'> <a id='side-menu-vetilation' class='nav-link ventilation'
+                        href='javascript:void(0);' onclick='side_menu_click("ventilation")'>m. Ventilation </li>
+                    <li class='active' id='liBp'> <a id='side-menu-bp' class='nav-link bp'
+                        href='javascript:void(0);' onclick='side_menu_click("bp")'>n. Bilge Pumps</a> </li>
+                    i class='active' id='liBw'> <a id='side-menu-bw' class='nav-link osib'
+                        href='javascript:void(0);' onclick='side_menu_click("bw")'>o. Ballast Water</a> </li>
                 </ul>
               </li>
             </ul>
@@ -286,7 +301,12 @@
               $("#liBafc").removeClass("active");// 
               $("#liBafc").addClass("disabled");// for 2nd li disable  
               document.getElementById('side-menu-bafc').style.color="grey";
-              break;      
+              break;    
+          case 'fws':
+              $("#liFws").removeClass("active");// 
+              $("#liFws").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-fws').style.color="grey";
+              break;        
           case "all":
             //   $("#liGeneral").removeClass("active");// 
             //   $("#liGeneral").addClass("disabled");// for 2nd li disable  
@@ -302,6 +322,9 @@
               $("#liBafc").removeClass("active");// 
               $("#liBafc").addClass("disabled");// for 2nd li disable  
               document.getElementById('side-menu-bafc').style.color="grey";
+              $("#liFws").removeClass("active");// 
+              $("#liFws").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-fws').style.color="grey";
               break;
       }
     }
@@ -333,6 +356,11 @@
               $("#liBafc").addClass("enabled");// for 2nd li enable  
               document.getElementById('side-menu-bafc').style.color="black";
               break;
+          case "fws":
+              $("#liFws").removeClass("disabled");// 
+              $("#liFws").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-fws').style.color="black";
+              break;
           case "all":
               $("#liDockage").removeClass("disabled");// 
               $("#liDockage").addClass("enabled");// for 2nd li enable  
@@ -346,6 +374,9 @@
               $("#liBafc").removeClass("disabled");// 
               $("#liBafc").addClass("enabled");// for 2nd li enable  
               document.getElementById('side-menu-bafc').style.color="black";
+              $("#liFws").removeClass("disabled");// 
+              $("#liFws").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-fws').style.color="black";
               break;
       }
     }
@@ -372,7 +403,7 @@
       $("#liRenewal").addClass("disabled");
       document.getElementById('liCreateNew').style.color="grey"; //tidak jalan
       // document.getElementById("storage").value="xxxxxxx/no/yes/yes"
-      $.get("php/renewalPropForm.php",function(data) {
+      $.get("php/renewalprop-form.php",function(data) {
           $("#container").html(data);
       
       });

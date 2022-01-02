@@ -117,7 +117,7 @@
                         href='javascript:void(0);' onclick='side_menu_click("pilotage")'>c. Pilotage</a> </li>
                     <li class='active' id='liFg'> <a id='side-menu-fg' class='nav-link fg'
                         href='javascript:void(0);' onclick='side_menu_click("fg")'>d. Fire Guard</a> </li>
-                        <li class='active' id='liWatchman'> <a id='side-menu-watchman' class='nav-link watchman'
+                    <li class='active' id='liWatchman'> <a id='side-menu-watchman' class='nav-link watchman'
                         href='javascript:void(0);' onclick='side_menu_click("watchman")'>e. Watchman</a> </li>
                     <li class='active' id='liDs'> <a id='side-menu-ds' class='nav-link ds'
                         href='javascript:void(0);' onclick='side_menu_click("ds")'>f. Diver Service</a> </li>
@@ -125,11 +125,11 @@
                         href='javascript:void(0);' onclick='side_menu_click("gd")'>g. Garbage Disposal</a> </li>
                     <li class='active' id='liOsib'> <a id='side-menu-osib' class='nav-link osib'
                         href='javascript:void(0);' onclick='side_menu_click("osib")'>h. Oil Storing in Barge</a> </li>
-                    li class='active' id='liFtb'> <a id='side-menu-ftb' class='nav-link ftb'
+                    <li class='active' id='liFtb'> <a id='side-menu-ftb' class='nav-link ftb'
                         href='javascript:void(0);' onclick='side_menu_click("ftb")'>i. Flat Top Barge (in Shipyard Area)</a> </li>
                     <li class='active' id='liTlp'> <a id='side-menu-tlp' class='nav-link tlp'
                         href='javascript:void(0);' onclick='side_menu_click("tlp")'>j. Telephone</a> </li>
-                    li class='active' id='liFp'> <a id='side-menu-osib' class='nav-link fp'
+                    <li class='active' id='liFp'> <a id='side-menu-fp' class='nav-link fp'
                         href='javascript:void(0);' onclick='side_menu_click("fp")'>k. Fire Precaution</a> </li>
                     <li class='active' id='liStaging'> <a id='side-menu-staging' class='nav-link staging'
                         href='javascript:void(0);' onclick='side_menu_click("staging")'>l. Staging</a> </li>
@@ -137,7 +137,7 @@
                         href='javascript:void(0);' onclick='side_menu_click("ventilation")'>m. Ventilation </li>
                     <li class='active' id='liBp'> <a id='side-menu-bp' class='nav-link bp'
                         href='javascript:void(0);' onclick='side_menu_click("bp")'>n. Bilge Pumps</a> </li>
-                    i class='active' id='liBw'> <a id='side-menu-bw' class='nav-link osib'
+                    <li class='active' id='liBw'> <a id='side-menu-bw' class='nav-link bw'
                         href='javascript:void(0);' onclick='side_menu_click("bw")'>o. Ballast Water</a> </li>
                 </ul>
               </li>
@@ -273,113 +273,12 @@
         </div>
     </div>
   </div>  
+  
+  
+  
   <script>
-    function disableSideMenu(str) {
-      enableSideMenu("all");
-      switch (str) {	
-          case 'dockage':
-              $("#liDockage").removeClass("active");// 
-              $("#liDockage").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-dockage').style.color="grey";
-              break;
-          case 'floating':
-              $("#liFloating").removeClass("active");// 
-              $("#liFloating").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-floating').style.color="grey";
-              break;
-          case 'mooring':
-              $("#liMooring").removeClass("active");// 
-              $("#liMooring").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-mooring').style.color="grey";
-              break;  
-          case 'dbr':
-              $("#liDbr").removeClass("active");// 
-              $("#liDbr").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-dbr').style.color="grey";
-              break;      
-          case 'bafc':
-              $("#liBafc").removeClass("active");// 
-              $("#liBafc").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-bafc').style.color="grey";
-              break;    
-          case 'fws':
-              $("#liFws").removeClass("active");// 
-              $("#liFws").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-fws').style.color="grey";
-              break;        
-          case "all":
-            //   $("#liGeneral").removeClass("active");// 
-            //   $("#liGeneral").addClass("disabled");// for 2nd li disable  
-              $("#liDockage").removeClass("active");// 
-              $("#liDockage").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-dockage').style.color="grey";
-              $("#liFloating").removeClass("active");// 
-              $("#liFloating").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-floating').style.color="grey";
-              $("#liDbr").removeClass("active");// 
-              $("#liDbr").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-dbr').style.color="grey";
-              $("#liBafc").removeClass("active");// 
-              $("#liBafc").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-bafc').style.color="grey";
-              $("#liFws").removeClass("active");// 
-              $("#liFws").addClass("disabled");// for 2nd li disable  
-              document.getElementById('side-menu-fws').style.color="grey";
-              break;
-      }
-    }
-    function enableSideMenu(str) {
-     
-      switch (str) {	
-          case 'dockage':
-              $("#liDockage").removeClass("disabled");// 
-              $("#liDockage").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-dockage').style.color="black";
-              break;
-          case "floating":
-              $("#liFloating").removeClass("disabled");// 
-              $("#liFloating").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-floating').style.color="black";
-              break;
-          case "mooring":
-              $("#liMooring").removeClass("disabled");// 
-              $("#liMooring").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-floating').style.color="black";
-              break;
-          case "dbr":
-              $("#liDbr").removeClass("disabled");// 
-              $("#liDbr").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-dbr').style.color="black";
-              break;
-          case "bafc":
-              $("#liBafc").removeClass("disabled");// 
-              $("#liBafc").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-bafc').style.color="black";
-              break;
-          case "fws":
-              $("#liFws").removeClass("disabled");// 
-              $("#liFws").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-fws').style.color="black";
-              break;
-          case "all":
-              $("#liDockage").removeClass("disabled");// 
-              $("#liDockage").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-dockage').style.color="black";
-              $("#liFloating").removeClass("disabled");// 
-              $("#liFloating").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-floating').style.color="black";
-              $("#liDbr").removeClass("disabled");// 
-              $("#liDbr").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-dbr').style.color="black";
-              $("#liBafc").removeClass("disabled");// 
-              $("#liBafc").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-bafc').style.color="black";
-              $("#liFws").removeClass("disabled");// 
-              $("#liFws").addClass("enabled");// for 2nd li enable  
-              document.getElementById('side-menu-fws').style.color="black";
-              break;
-      }
-    }
+ 
+ 
     function openClick() {
       $("#liCreateNew").removeClass("active");// 
       $("#liCreateNew").addClass("disabled");// for 2nd li disable  
@@ -409,17 +308,6 @@
       });
     }
   
-    function floatingClick() {
-      // alert("Floating in menu file");
-      // enableSideMenu("all");
-      disableSideMenu("floating");
-      // $.get("php/floating.php",function(data) {
-      //      $("#floating").html(data);
-       
-      //   });
-    }
-
-
   </script>
 
 
@@ -502,8 +390,358 @@ if (isset($_GET["newfile"])) {
         // alert("masuk disable menu");
         disableSideMenu("all");
     }
- </script>
 
+    function enableSideMenu(str) {
+      alert("masuk enable atas");
+      switch (str) {	
+          case 'dockage':
+              $("#liDockage").removeClass("disabled");// 
+              $("#liDockage").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-dockage').style.color="black";
+              break;
+          case "floating":
+              $("#liFloating").removeClass("disabled");// 
+              $("#liFloating").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-floating').style.color="black";
+              break;
+          case "mooring":
+              $("#liMooring").removeClass("disabled");// 
+              $("#liMooring").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-mooring').style.color="black";
+              break;
+          case "dbr":
+              $("#liDbr").removeClass("disabled");// 
+              $("#liDbr").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-dbr').style.color="black";
+              break;
+          case "bafc":
+              $("#liBafc").removeClass("disabled");// 
+              $("#liBafc").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-bafc').style.color="black";
+              break;
+          case "fws":
+              $("#liFws").removeClass("disabled");// 
+              $("#liFws").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-fws').style.color="black";
+              break;
+
+          case "cas":
+              $("#liCas").removeClass("disabled");// 
+              $("#liCas").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-cas').style.color="black";
+              break;
+          case "pilotage":
+              $("#liPilotage").removeClass("disabled");// 
+              $("#liPilotage").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-pilotage').style.color="black";
+              break;
+          case "fg":
+              $("#liFg").removeClass("disabled");// 
+              $("#liFg").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-fg').style.color="black";
+              break;
+          case "watchman":
+              $("#liWatchman").removeClass("disabled");// 
+              $("#liWatchman").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-watchman').style.color="black";
+              break;
+          case "ds":
+              $("#liDs").removeClass("disabled");// 
+              $("#liDs").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-ds').style.color="black";
+              break;
+          // case "gd":
+          //     $("#liGd").removeClass("disabled");// 
+          //     $("#liGd").addClass("enabled");// for 2nd li enable  
+          //     document.getElementById('side-menu-gd').style.color="black";
+          //     break;
+          // case "osib":
+          //     $("#liOsib").removeClass("disabled");// 
+          //     $("#liOsib").addClass("enabled");// for 2nd li enable  
+          //     document.getElementById('side-menu-fosib').style.color="black";
+          //     break;
+          // case "ftb":
+          //     $("#liFtb").removeClass("disabled");// 
+          //     $("#liFtb").addClass("enabled");// for 2nd li enable  
+          //     document.getElementById('side-menu-ftb').style.color="black";
+          //     break;
+          // case "tlp":
+          //     $("#liTlp").removeClass("disabled");// 
+          //     $("#liTlp").addClass("enabled");// for 2nd li enable  
+          //     document.getElementById('side-menu-tlp').style.color="black";
+          //     break;
+          // case "fp":
+          //     $("#liFp").removeClass("disabled");// 
+          //     $("#liFp").addClass("enabled");// for 2nd li enable  
+          //     document.getElementById('side-menu-fp').style.color="black";
+          //     break;
+          // case "staging":
+          //     $("#liStaging").removeClass("disabled");// 
+          //     $("#liStaging").addClass("enabled");// for 2nd li enable  
+          //     document.getElementById('side-menu-staging').style.color="black";
+          //     break;
+          // case "ventilation":
+          //     $("#liVentilation").removeClass("disabled");// 
+          //     $("#liVentilation").addClass("enabled");// for 2nd li enable  
+          //     document.getElementById('side-menu-ventilation').style.color="black";
+          //     break;
+          // case "bp":
+          //     $("#liBp").removeClass("disabled");// 
+          //     $("#liBp").addClass("enabled");// for 2nd li enable  
+          //     document.getElementById('side-menu-bp').style.color="black";
+          //     break;
+          // case "bw":
+          //     $("#liBw").removeClass("disabled");// 
+          //     $("#liBw").addClass("enabled");// for 2nd li enable  
+          //     document.getElementById('side-menu-bw').style.color="black";
+          //     break;
+          case "all":
+              alert ("masuk enable all");
+              $("#liDockage").removeClass("disabled");// 
+              $("#liDockage").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-dockage').style.color="black";
+              $("#liFloating").removeClass("disabled");// 
+              $("#liFloating").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-floating').style.color="black";
+              $("#liDbr").removeClass("disabled");// 
+              $("#liDbr").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-dbr').style.color="black";
+              $("#liBafc").removeClass("disabled");// 
+              $("#liBafc").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-bafc').style.color="black";
+              $("#liFws").removeClass("disabled");// 
+              $("#liFws").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-fws').style.color="black";
+              $("#liCas").removeClass("disabled");// 
+              $("#liCas").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-cas').style.color="black";
+    
+              $("#liPilotage").removeClass("disabled");// 
+              $("#liPilotage").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-pilotage').style.color="black";
+  
+              $("#liFg").removeClass("disabled");// 
+              $("#liFg").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-fg').style.color="black";
+            
+              // $("#liWatchman").removeClass("disabled");// 
+              // $("#liWatchman").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-watchman').style.color="black";
+   
+              $("#liDs").removeClass("disabled");// 
+              $("#liDs").addClass("enabled");// for 2nd li enable  
+              document.getElementById('side-menu-ds').style.color="black";
+         
+              // $("#liGd").removeClass("disabled");// 
+              // $("#liGd").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-gd').style.color="black";
+          
+              // $("#liOsib").removeClass("disabled");// 
+              // $("#liOsib").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-fosib').style.color="black";
+       
+              // $("#liFtb").removeClass("disabled");// 
+              // $("#liFtb").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-ftb').style.color="black";
+        
+              // $("#liTlp").removeClass("disabled");// 
+              // $("#liTlp").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-tlp').style.color="black";
+      
+              // $("#liFp").removeClass("disabled");// 
+              // $("#liFp").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-fp').style.color="black";
+       
+              // $("#liStaging").removeClass("disabled");// 
+              // $("#liStaging").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-staging').style.color="black";
+        
+              // $("#liVentilation").removeClass("disabled");// 
+              // $("#liVentilation").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-ventilation').style.color="black";
+         
+              // $("#liBp").removeClass("disabled");// 
+              // $("#liBp").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-bp').style.color="black";
+  
+              // $("#liBw").removeClass("disabled");// 
+              // $("#liBw").addClass("enabled");// for 2nd li enable  
+              // document.getElementById('side-menu-bw').style.color="black";
+              break;
+      }
+    }
+
+    function disableSideMenu(str) {
+      enableSideMenu("all");
+      switch (str) {	
+          case 'dockage':
+              $("#liDockage").removeClass("active");// 
+              $("#liDockage").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-dockage').style.color="grey";
+              break;
+          case 'floating':
+              $("#liFloating").removeClass("active");// 
+              $("#liFloating").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-floating').style.color="grey";
+              break;
+          case 'mooring':
+              $("#liMooring").removeClass("active");// 
+              $("#liMooring").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-mooring').style.color="grey";
+              break;  
+          case 'dbr':
+              $("#liDbr").removeClass("active");// 
+              $("#liDbr").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-dbr').style.color="grey";
+              break;      
+          case 'bafc':
+              $("#liBafc").removeClass("active");// 
+              $("#liBafc").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-bafc').style.color="grey";
+              break;    
+          case 'fws':
+              $("#liFws").removeClass("active");// 
+              $("#liFws").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-fws').style.color="grey";
+              break;       
+          case 'cas':
+              $("#liCas").removeClass("active");// 
+              $("#liCas").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-cas').style.color="grey";
+              break;       
+          case 'pilotage':
+              $("#liPilotage").removeClass("active");// 
+              $("#liPilotage").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-pilotage').style.color="grey";
+              break;    
+          case 'fg':
+              $("#liFg").removeClass("active");// 
+              $("#liFg").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-fg').style.color="grey";
+              break;     
+          // case 'watchman':
+          //     $("#liWatchman).removeClass("active");// 
+          //     $("#liWatchman").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-watchman').style.color="grey";
+          //     break; 
+          case 'ds':
+              $("#liDs").removeClass("active");// 
+              $("#liDs").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-ds').style.color="grey";
+              break;    
+          // case 'gd':
+          //     $("#liGd").removeClass("active");// 
+          //     $("#liGd").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-gd').style.color="grey";
+          //     break;   
+          // case 'osib':
+          //     $("#liOsib).removeClass("active");// 
+          //     $("#liOsib").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-osib').style.color="grey";
+          //     break; 
+          // case 'ftb':
+          //     $("#liFtb").removeClass("active");// 
+          //     $("#liFtb").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-ftb').style.color="grey";
+          //     break;    
+          // case 'tlp':
+          //     $("#liTlp").removeClass("active");// 
+          //     $("#liTlp").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-tlp').style.color="grey";
+          //     break;  
+          // case 'fp':
+          //     $("#liFp").removeClass("active");// 
+          //     $("#liFp").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-fp').style.color="grey";
+          //     break;  
+          // case 'staging':
+          //     $("#liStaging").removeClass("active");// 
+          //     $("#liStaging").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-staging').style.color="grey";
+          //     break;       
+          // case 'ventilation':
+          //     $("#liVentilation").removeClass("active");// 
+          //     $("#liVentilation").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-ventilation').style.color="grey";
+          //     break;  
+          // case 'bp':
+          //     $("#liBp").removeClass("active");// 
+          //     $("#liBp").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-bp').style.color="grey";
+          //     break;   
+          // case 'bw':
+          //     $("#liBw").removeClass("active");// 
+          //     $("#liBw").addClass("disabled");// for 2nd li disable  
+          //     document.getElementById('side-menu-bw').style.color="grey";
+          //     break;                                                                                                           
+          case "all":
+              $("#liDockage").removeClass("active");// 
+              $("#liDockage").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-dockage').style.color="grey";
+              $("#liFloating").removeClass("active");// 
+              $("#liFloating").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-floating').style.color="grey";
+              $("#liDbr").removeClass("active");// 
+              $("#liDbr").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-dbr').style.color="grey";
+              $("#liBafc").removeClass("active");// 
+              $("#liBafc").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-bafc').style.color="grey";
+              $("#liFws").removeClass("active");// 
+              $("#liFws").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-fws').style.color="grey";
+              $("#liCas").removeClass("active");// 
+              $("#liCas").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-cas').style.color="grey";
+              $("#liPilotage").removeClass("active");// 
+              $("#liPilotage").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-pilotage').style.color="grey";
+              $("#liFg").removeClass("active");// 
+              $("#liFg").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-fg').style.color="grey";  
+              // $("#liWatchman).removeClass("active");// 
+              // $("#liWatchman").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-watchman').style.color="grey";
+              $("#liDs").removeClass("active");// 
+              $("#liDs").addClass("disabled");// for 2nd li disable  
+              document.getElementById('side-menu-ds').style.color="grey";
+              // $("#liGd").removeClass("active");// 
+              // $("#liGd").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-gd').style.color="grey"; 
+              // $("#liOsib).removeClass("active");// 
+              // $("#liOsib").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-osib').style.color="grey";
+              // $("#liFtb").removeClass("active");// 
+              // $("#liFtb").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-ftb').style.color="grey";
+              // $("#liTlp").removeClass("active");// 
+              // $("#liTlp").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-tlp').style.color="grey"; 
+              // $("#liFp").removeClass("active");// 
+              // $("#liFp").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-fp').style.color="grey";
+       
+              // $("#liStaging").removeClass("active");// 
+              // $("#liStaging").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-staging').style.color="grey";
+        
+              // $("#liVentilation").removeClass("active");// 
+              // $("#liVentilation").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-ventilation').style.color="grey";
+       
+              // $("#liBp").removeClass("active");// 
+              // $("#liBp").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-bp').style.color="grey";
+       
+              // $("#liBw").removeClass("active");// 
+              // $("#liBw").addClass("disabled");// for 2nd li disable  
+              // document.getElementById('side-menu-bw').style.color="grey";      
+              // break;
+      }
+    }
+ 
+ 
+ </script>
 
 
   <div id="container" class="container"></div>  
